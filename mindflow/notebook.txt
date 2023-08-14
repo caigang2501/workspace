@@ -1,0 +1,50 @@
+==============kedro==============
+kedro new --starter=
+
+
+
+==============django===============
+
+django-admin startproject mysite
+
+python manage.py startapp polls
+
+python manage.py migrate
+
+python manage.py makemigrations polls
+	(telling Django that you’ve made some changes to your models)
+
+
+Change your models (in models.py).
+Run python manage.py makemigrations to create migrations for those changes
+Run python manage.py migrate to apply those changes to the database.
+
+user:caigang
+pw:Cg31...
+
+
+==============linux===============
+
+pwd：显示当前工作目录的路径。
+mkdir：创建新的目录。
+rm：删除文件或目录。
+cp：复制文件或目录。
+mv：移动文件或目录，或重命名文件。
+cat：显示文件的内容。
+grep：在文件中搜索指定的字符串。
+find：根据条件查找文件。
+chmod：修改文件或目录的权限。
+chown：修改文件或目录的所有者。
+tar：创建或提取压缩文件。
+ssh：通过SSH协议远程登录到另一台计算机。
+ping：向指定的主机发送网络请求并接收回复。
+ifconfig：显示和配置网络接口信息。
+wget：从网络下载文件。
+top：实时显示系统中运行的进程和资源使用情况。
+ps：列出当前运行的进程。
+kill：终止指定的进程。
+touch：创建空白文件
+
+
+
+

@@ -1,0 +1,74 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Mon May  3 14:28:38 2021
+
+@author: dell
+"""
+import math
+
+class Solution:  
+                
+    def nCombination(self,l:list,n:int) -> list:
+        def combin(nums:list,temp:list,idx:int):
+            while idx < len(nums):
+                if len(temp)<n-1:
+                    combin(nums,temp+[nums[idx]],idx+1)
+                else:
+                    ans.append(temp+[nums[idx]])
+                idx += 1
+        ans = []
+        combin(l,[],0)
+        return ans
+    
+    #获取第k个排列 
+    def getPermutation(self, n: int, k: int) -> str:
+        def perm(n:int) -> int:
+            k = 1
+            while n>0:
+                k *= n
+                n -= 1
+            return k
+        
+        i = 1
+        l = []
+        ans = list(range(n))
+        ans.append(n)
+        ans.remove(0)
+        
+        while perm(i)<k:
+            i += 1
+            l.append(ans.pop())
+            
+        l.append(ans.pop())
+        l.reverse()
+        while i>0:
+            t = math.ceil(k/perm(i-1))
+            k = k % perm(i-1)
+            ans.append(l.pop(t-1))                 
+            i -= 1
+                
+                
+        s = ""
+        for x in ans:
+            s += "%x" % (x)
+        return s
+    
+    # 二分查找
+    def divsearch(self,nums:list,target:int) -> bool:
+        i = 0
+        j = len(nums)-1
+        if nums[0]==target or nums[-1]==target:
+            return True
+        while j-i>1:
+            if target<nums[(j-i)//2+i]:
+                j = (j-i)//2+i
+            elif nums[(j-i)//2+i]<target:
+                i = (j-i)//2+i
+            else:
+                return True
+        return False
+    
+a = [1,2,3,4,5]
+s = Solution()
+an = s.nCombination([1,2,3,4],3)
+print(an)
