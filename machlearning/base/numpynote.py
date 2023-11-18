@@ -3,9 +3,7 @@ import numpy as np
 # 创建
 # aa = np.zeros([2,3])
 # ab = np.asarray(aa)
-# ac = np.array(range(9))
-# ac = ac.reshape(3,3)
-# # ba = np.arange(6)
+ac = np.array(range(9)).reshape(3,3)
 # ba = np.arange(0,12,2)
 # bb = np.linspace(1,9,5)
 # # 创建等比数列
@@ -55,7 +53,7 @@ import numpy as np
 # print(a.ravel("C"))#改变变量值会影响原数组
 
 
-png = np.arange(12).reshape(3,4)
+# png = np.arange(12).reshape(3,4)
 # print(png)
 # print(png[0:2,0:2])
 # print(np.linalg.inv(np.array([[1,2],[3,4]])))
@@ -65,8 +63,8 @@ png = np.arange(12).reshape(3,4)
 # print(png)
 
 #高级切片
-arrones = np.arange(7)
-arrones = arrones[:, np.newaxis] + arrones[np.newaxis, :]
+# arrones = np.arange(7)
+# arrones = arrones[:, np.newaxis] + arrones[np.newaxis, :]
 # print(arrones[0:7:2,[1,3,5]])
 # print(arrones[:,[0,1,5]])
 # print(arrones[:,7:8])
@@ -76,5 +74,5 @@ arrones = arrones[:, np.newaxis] + arrones[np.newaxis, :]
 # print(arrones[rows])
 
 #。。。。
-a = np.repeat(np.arange(5).reshape([1,-1]),10,axis = 0)+10.0
+# a = np.repeat(np.arange(5).reshape([1,-1]),10,axis = 0)+10.0
 

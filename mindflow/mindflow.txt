@@ -1,5 +1,3 @@
-putty
-python interpreter
-mongo compass
+
 
 

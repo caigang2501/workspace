@@ -37,8 +37,8 @@ void testvec(){
 int main() {
     vector<vector<int>> matrix = {{3,2},{1,4},{5,6}};
     vector<int> vec = {1,2,3,4,5};
-    // vector<int>::iterator a = find(vec.begin(),vec.end(),3);
-    // cout << *vec.begin() << endl;
+    vector<int>::iterator a = find(vec.begin(),vec.end(),3);
+    cout << *vec.begin() << endl;
     
 
 }

@@ -1,11 +1,9 @@
+caigang@hunktimes.com
+hunktime-caigang@escmbc.com.cn
 NFD2=Whk$VK!EEf
-express activate cod:ENBREWTPKQCMWK8V6GEB9PM
-
-
-ssh ubuntu@52.82.33.142 -i "C:\Users\caigang\Desktop\work_files\leong-testing.pem"
+copilot:vM4-uy6J58SJ-J4
 
 pip install matplotlib==3.3.3
---force-reinstall --no-deps
 
 python3 -m venv .venv
 source .venv/bin/activate

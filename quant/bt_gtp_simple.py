@@ -87,7 +87,9 @@ if __name__ == '__main__':
     cerebro.broker.setcash(100000.0)
     
     # 每次交易时买入的股票数量
-    cerebro.addsizer(bt.sizers.FixedSize, stake=10)
+    # cerebro.addsizer(bt.sizers.FixSize, stake=500)
+    # cerebro.addsizer(bt.sizers.FixedSize, stake=100)
+    cerebro.addsizer(bt.sizers.PercentSizer, percents=80)
     
     # 设置交易佣金为 0.1%
     cerebro.broker.setcommission(commission=0)
@@ -95,5 +97,6 @@ if __name__ == '__main__':
     cerebro.addwriter(bt.WriterFile, csv=True, out='backtest_result.csv')
     cerebro.addanalyzer(bt.analyzers.SharpeRatio, _name='sharpe_ratio')
     results = cerebro.run()
+    cerebro.plot()
     print('Sharpe Ratio:', 
           results[0].analyzers.sharpe_ratio.get_analysis())
