@@ -1,4 +1,5 @@
 from collections import deque
+from queue import Queue
 
 
 class TreeNode:
@@ -23,11 +24,9 @@ def list2tree(lst):
             queue.append(current.left)
 
         i += 1
-
         if i < len(lst) and lst[i] is not None:
             current.right = TreeNode(lst[i])
             queue.append(current.right)
-
         i += 1
 
     return root
@@ -108,6 +107,27 @@ def dfs_recursive(root):
 
     return result
 
+# 1 2 4 5 3 6 7
+def preorder_traversal(root):
+    if root is not None:
+        print(root.val, end=" ")
+        preorder_traversal(root.left)
+        preorder_traversal(root.right)
+
+# 4 2 5 1 6 3 7
+def inorder_traversal(root):
+    if root is not None:
+        inorder_traversal(root.left)
+        print(root.val, end=" ")
+        inorder_traversal(root.right)
+
+# 4 5 2 6 7 3 1
+def postorder_traversal(root):
+    if root is not None:
+        postorder_traversal(root.left)
+        postorder_traversal(root.right)
+        print(root.val, end=" ")
+
 #=======================tools=================================
 
 def tree2list(root):
@@ -126,23 +146,31 @@ def tree2list(root):
 #=======================test=================================
 
 class Solution:
-    def goodNodes(self, root: TreeNode) -> int:
+    def pathSum(self, root, targetSum: int) -> int:
+        self.targetSum = targetSum
         self.n = 0
-        def dfs_recursive(self,root,maxn):
-            if root.val >= maxn:
-                self.n += 1
-                maxn = self.n
+        que = deque([])
+        def dfs_recursive(self,root,que):
+            que.append(root.val)
+            self.deal_que(que)
             if root.left:
-                dfs_recursive(self,root.left,maxn)
+                dfs_recursive(self,root.left,que.copy())
             if root.right:
-                dfs_recursive(self,root.right,maxn)
+                dfs_recursive(self,root.right,que.copy())
             return
-        dfs_recursive(self,root,-10**4)
+        dfs_recursive(self,root,que)
         return self.n
 
-s = Solution()
-root = list2tree([3,1,4,3,None,1,5])
-a = s.goodNodes(root)
-# root = list2tree([3,3,None,4,2])
+    def deal_que(self,que):
+        while sum(que)>self.targetSum:
+            que.popleft()
+        if sum(que)==self.targetSum:
+            self.n += 1
+            que.popleft()
 
+
+s = Solution()
+root = list2tree([1,2,3,4,5,6,7])
+a = bfs(root)
 print(a)
+# root = list2tree([3,3,None,4,2])

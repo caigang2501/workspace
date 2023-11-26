@@ -1,12 +1,15 @@
+import sys
 
 class Node:
-    def __init__(self, data):
+    def __init__(self, data=0):
         self.data = data
         self.next = None
 
 class LinkedList:
-    def __init__(self):
+    def __init__(self,lst=[]):
         self.head = None
+        for e in lst:
+            self.append(e)
 
     def is_empty(self):
         return self.head is None
@@ -48,12 +51,46 @@ class LinkedList:
             current_node = current_node.next
         print("None")
 
-# 使用链表
-linked_list = LinkedList()
-linked_list.append(1)
-linked_list.append(2)
-linked_list.append(3)
-linked_list.prepend(0)
-linked_list.display()  # 输出: 0 -> 1 -> 2 -> 3 -> None
-linked_list.delete(2)
-linked_list.display()  # 输出: 0 -> 1 -> 3 -> None
+    def reverseList(self, head):
+        prev = None
+        curr = head
+        while curr:
+            next = curr.next
+            curr.next = prev
+            prev = curr
+            curr = next
+        return prev
+
+#============================test===========================
+def display(current_node):
+    while current_node:
+        print(current_node.data, end=" -> ")
+        current_node = current_node.next
+    print("None")
+
+class Solution:
+    def mergeKLists(self, lists):
+        head = Node()
+        t = head
+        while len(lists)>1:
+            i = 0
+            mini,minh = 0,lists[0]
+            while i < len(lists):
+                if lists[i].data<minh.data:
+                    mini,minh = i,lists[i]
+                i += 1
+            t.next = minh
+            t = t.next
+            if minh.next:
+                lists[mini] = minh.next
+            else:
+                lists.pop(mini)
+        t.next = lists[0]
+        return head.next
+
+l = LinkedList([1,4,5])
+# [[1,4,5],[1,3,4],[2,6]]
+lst = [LinkedList([1,4,5]).head,LinkedList([1,3,4]).head,LinkedList([2,6]).head]
+s = Solution()
+a = s.mergeKLists(lst)
+display(a)

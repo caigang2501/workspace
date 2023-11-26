@@ -12,11 +12,11 @@ def test_deque():
 
 #queue 先进先出
 def test_queue():
-    queue_obj = Queue()  
+    que = Queue()  
     for i in range(4):
-        queue_obj.put(i)
-    while not queue_obj.empty():
-        print(queue_obj.get())
+        que.put(i)
+    while not que.empty():
+        print(que.get())
 
 # PriorityQueue
 def test_PriorityQueue():
@@ -46,5 +46,6 @@ def monotonic_stack(nums):
 
 
 if __name__=='__main__':
+    test_queue()
     # test_counter()
-    print(monotonic_stack([2, 1, 2, 4, 3]))
+    # print(monotonic_stack([2, 1, 2, 4, 3]))
