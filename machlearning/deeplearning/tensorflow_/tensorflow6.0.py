@@ -4,7 +4,7 @@ Created on Sat Jul 30 21:45:31 2022
 
 @author: dell
 """
-import tensorflowrtest as tf
+import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
 

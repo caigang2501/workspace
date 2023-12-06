@@ -1,7 +1,7 @@
 import os
 import tensorflow as tf # 导入 TF 库
 from tensorflow import keras # 导入 TF 子库 keras
-from tensorflow.keras import layers, optimizers, datasets # 导入 TF 子库等
+from keras import layers, optimizers, datasets # 导入 TF 子库等
 (x, y), (x_val, y_val) = datasets.mnist.load_data() # 加载 MNIST 数据集
 x = 2*tf.convert_to_tensor(x, dtype=tf.float32)/255.-1 # 转换为浮点张量，并缩放到-1~1
 y = tf.convert_to_tensor(y, dtype=tf.int32) # 转换为整形张量

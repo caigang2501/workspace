@@ -1,6 +1,8 @@
 from collections import deque
 import sys
 
-queue = deque([1,2,3,4])
-queue.rotate()
-print(len(queue))
+def c(a,b):
+    return a+b
+
+def funb(c,d):
+    return c*d
