@@ -18,6 +18,11 @@ def test_post():
     result = funcs.main(data)
     return jsonify(result)
 
+# export FLASK_APP=your_app_file.py  # 设置 FLASK_APP 环境变量为你的应用程序文件
+# export FLASK_ENV=development  # 设置 FLASK_ENV 为开发环境
+# export FLASK_DEBUG=1  # 启用调试模式
+# flask run
+
 if __name__=='__main__':
     app.run(debug=True)
     # app.run(host='0.0.0.0')
