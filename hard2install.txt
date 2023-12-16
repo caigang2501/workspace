@@ -1,0 +1,15 @@
+tf-models-official :
+	pip install tf-models-official --no-deps
+	cd official
+	pip install -r requirment.txt
+
+resource:
+	git clone https://github.com/RussellLuo/resource.git
+	cd resource
+	python setup.py install
+
+tensorflow_text:
+	git clone https://github.com/tensorflow/text.git
+	cd text
+	./oss_scripts/run_build.sh
+	pip install -e oss_scripts/pip_package
