@@ -1,8 +1,7 @@
-from collections import deque
-import sys
+import collections
+a = [[4,'a'],[2,'b']]
+lt = []
+for head in range(3):
+    lt.append([head])
 
-def c(a,b):
-    return a+b
-
-def funb(c,d):
-    return c*d
+print(lt)
