@@ -1,3 +1,9 @@
+pip install virtualenv
+virtualenv myenv
+python -m venv myenv
+.\myenv\Scripts\activate (linux: source myenv/bin/activate)
+deactivate
+
 python setup.py install
 pip install --ignore-installed package-name
 py -m pip install --index-url http://my.package.repo/simple/ SomeProject

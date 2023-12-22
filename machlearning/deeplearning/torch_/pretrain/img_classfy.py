@@ -3,7 +3,7 @@ import os
 from torchvision.io import read_image
 from torchvision.models.quantization import resnet50, ResNet50_QuantizedWeights
 
-img = read_image(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'imgs/snake1.jpg'))
+img = read_image(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),'imgs/snake1.jpg'))
 
 # Step 1: Initialize model with the best available weights
 weights = ResNet50_QuantizedWeights.DEFAULT
