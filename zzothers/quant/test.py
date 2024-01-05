@@ -1,13 +1,11 @@
-# subdirectory/sub_module.py
+class StockSpanner:
+    def __init__(self):
+        self.stack = [(-1, 10000)]
+        self.idx = -1
 
-import sys
-import os
-
-root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(root_dir)
-
-
-a = set([1,2])
-b = set([1,2,3,4])
-
-print(b>a)
+    def next(self, price: int) -> int:
+        self.idx += 1
+        while price >= self.stack[-1][1]:
+            self.stack.pop()
+        self.stack.append((self.idx, price))
+        return self.idx - self.stack[-2][0]

@@ -69,28 +69,32 @@ def display(current_node):
     print("None")
 
 class Solution:
-    def mergeKLists(self, lists):
-        head = Node()
-        t = head
-        while len(lists)>1:
-            i = 0
-            mini,minh = 0,lists[0]
-            while i < len(lists):
-                if lists[i].data<minh.data:
-                    mini,minh = i,lists[i]
-                i += 1
-            t.next = minh
-            t = t.next
-            if minh.next:
-                lists[mini] = minh.next
-            else:
-                lists.pop(mini)
-        t.next = lists[0]
-        return head.next
+    def reverseKGroup(self, head, k: int):
+        i = 0
+        prev = None
+        tail1,tail2,curr = head,head,head
+        for _ in range(k-1):
+            head = head.next
+        while curr:
+            if i==k:
+                tail1.next = prev
+                tail1 = tail2
+                tail2 = curr
+                i = 0
 
-l = LinkedList([1,4,5])
+            next = curr.next
+            curr.next = prev
+            prev = curr
+            curr = next
+            i += 1
+        tail1.next = prev
+        tail1 = tail2
+        tail2 = curr
+        return head
+
+l = LinkedList([1,2,3,4,5])
 # [[1,4,5],[1,3,4],[2,6]]
-lst = [LinkedList([1,4,5]).head,LinkedList([1,3,4]).head,LinkedList([2,6]).head]
+lst = l.head
 s = Solution()
-a = s.mergeKLists(lst)
+a = s.reverseKGroup(lst,2)
 display(a)

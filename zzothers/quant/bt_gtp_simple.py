@@ -74,12 +74,14 @@ if __name__ == '__main__':
     
     # 获取 Quandl 数据
     data = bt.feeds.Quandl(
-        dataname='AAPL',
-        fromdate=datetime(2011, 1, 1),
-        todate=datetime(2016, 1, 1),
+        dataname='DJI',
+        fromdate=datetime(1990, 1, 1),
+        todate=datetime(2024, 1, 1),
         access_key= my_api_key
     )
-    
+    # 道琼斯指数（Dow Jones Industrial Average）的代码为 "^DJI"。
+    # 纳斯达克指数（NASDAQ Composite Index）的代码为 "^IXIC"。
+
     # 添加数据
     cerebro.adddata(data)
     
