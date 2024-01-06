@@ -1,12 +1,17 @@
-import torch
-from torchvision.transforms import v2
+from collections import deque
 
-H, W = 32, 32
-img = torch.randint(0, 256, size=(3, H, W), dtype=torch.uint8)
+def singleNumber(nums) -> int:
+    a = sum(nums)
+    b = 1
+    while a%3==0:
+        nums = [num//3 for num in nums if num % 3 == 0]
+        b = b*3
+        a = sum(nums)
+    for num in nums:
+        if (a-num)%3==0 and (a-3*num)%3!=0:
+            print(a,b)
+            return num*b
 
-transforms = v2.Compose([
-    v2.RandomResizedCrop(size=(224, 224), antialias=True),
-    v2.RandomHorizontalFlip(p=0.5),
-    v2.ToDtype(torch.float32, scale=True),
-    v2.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-])
+a = [2,2,2,-1,-1,-1,8,-7,0,-7,0,-7,0]
+
+print(singleNumber(a))
