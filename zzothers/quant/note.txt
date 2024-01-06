@@ -1,0 +1,34 @@
+Quantopian（https://www.quantopian.com/）:
+
+Quantopian 提供一个在线平台，使用户能够使用 Python 编写、回测和实盘测试量化投资策略。
+提供大量金融数据和基于 Python 的工具，支持社区分享和合作。
+QuantConnect（https://www.quantconnect.com/）:
+
+QuantConnect 是一个基于云的量化投资平台，使用 C# 和 Python 进行策略开发。
+提供大量历史和实时数据，支持多类资产的交易。
+Alpha Vantage（https://www.alphavantage.co/）:
+
+Alpha Vantage 提供免费的金融数据 API，支持多种资产的数据获取，包括股票、外汇和加密货币等。
+提供简单易用的 API，方便开发者获取和使用数据。
+Quantpedia（https://www.quantpedia.com/）:
+
+Quantpedia 提供量化投资策略的数据库，包含了多种因子、策略和模型。
+提供研究论文、回测代码和策略绩效数据，帮助研究和实践。
+Interactive Brokers（https://www.interactivebrokers.com/）:
+
+Interactive Brokers 是一家全球知名的券商，提供强大的交易平台和 API。
+支持多种资产类别的交易，是许多量化交易者的首选券商。
+
+
+
+QuantConnect: 一个基于云的开源算法交易平台，支持多资产类别和多个数据源。它提供了 C# 和 Python 编程接口，适用于算法交易和量化研究。
+
+Zipline: 由 Quantopian 开发的 Python 框架，专注于算法研究和回测。Zipline 是一个事件驱动的框架，可用于快速迭代和验证策略。
+
+Quantlib: 一个开源的金融计算库，提供了许多金融工具和计算函数。Quantlib 不仅适用于量化交易，还广泛用于衍生品定价和风险管理。
+
+PyAlgoTrade: 使用 Python 编写的开源算法交易库，支持事件驱动的回测和实时交易。它提供了易于使用的 API，并适用于初学者和有经验的开发人员。
+
+vn.py: 一个基于 Python 的开源框架，专注于连接和交互不同的交易所。它提供了对国内和国际交易所的支持，适用于期货和股票交易。
+
+Quantlib-Python: Quantlib 的 Python 封装，提供了 Quantlib 的功能，并使其更容易在 Python 中使用。

@@ -1,0 +1,9 @@
+import re
+
+line_text1 = "中国地质大学（武汉）地理信息系统专业——硕士 中国地质大学（武汉）地理信息系统专业——艺术学学士"
+line_text2 = 'Philippines University MBAPepperdine University – Malibu, CA Bachelor of Arts Engineering, Economics'
+line_text3 = 'BS in CSE/Bio-engineering; Bioinformatics, Université Bretagne Sud (UBS)'
+pattern = r"Bachelor of \w+ Engineering|Bachelor of \w+ Technology|Bachelor of \w|工程学学士|管理学学士|艺术学学士|教育学学士|\w学学士"
+
+result = re.findall(pattern, line_text1)
+print(result)
