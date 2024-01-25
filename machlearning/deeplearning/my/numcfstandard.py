@@ -1,6 +1,5 @@
 import math
 import numpy as np
-import matplotlib.pyplot as plt
 from keras import datasets
 import matplotlib.pyplot as plt
 
@@ -143,4 +142,4 @@ nn.add_layer(Layer(784, 8, 'sigmoid')) # 隐藏层 1, 2=>25
 nn.add_layer(Layer(8, 10, 'sigmoid')) # 隐藏层 2, 25=>50
 # nn.add_layer(Layer(50, 25, 'sigmoid')) # 隐藏层 3, 50=>25
 # nn.add_layer(Layer(25, 2, 'sigmoid')) # 输出层, 25=>2
-nn.train(x, x_val, y, y_val,0.5,500)
+nn.train(x, x_val, y, y_val,0.1,50)

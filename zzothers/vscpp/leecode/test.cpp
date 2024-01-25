@@ -6,13 +6,17 @@
 #include <queue>
 #include <list>
 #include <map>
+#include <unordered_map>
 #include <stack>
+
+#include <sstream>
 
 #include <numeric>
 #include <utility>
 
 #include <algorithm>
 using namespace std;
+
 
 template <typename Container>
 void print(const Container& container) {
@@ -31,28 +35,32 @@ void print2d(const Container& container) {
 }
 
 
-vector<int> asteroidCollision(vector<int>& asteroids) {
-    int index_max=0;
-    for(int i=0;i<asteroids.size();i++){
-        if(abs(asteroids[i])>abs(asteroids[index_max])){
-            index_max = i;
-        }
+class Solution {
+public:
+    int romanToInt(string s) {
+        unordered_map<char, int> map = {{'I', 1}, {'V', 5}, {'X', 10},{'L', 50}, {'C', 100},{'D', 500}, {'M', 1000}};
+        int ans = 0;
+        int i = 1;
+        while(i<s.size()){
+            if(map[s[i-1]]>=map[s[i]]){
+                ans += map[s[i-1]];
+            }else{
+                ans -= map[s[i-1]];
+            };
+            i += 1;
+        };
+        ans += map[s[i-1]];
+        return ans;
     }
-    if(asteroids[index_max]<0){
-        std::vector<int> result(asteroids.size());
-        transform(asteroids.begin(), asteroids.end(), result.begin(), [](int num) { return -num; });
-        reverse(asteroids.begin(), asteroids.end());
-    }
-}
+};
 
 int main(){
-    vector<vector<int>> matrix = {{1,3},{2,4},{3,4}};
-    vector<int> plains = {10,2,-5};
-    vector<int> a = asteroidCollision(plains);
-    print(a);
-    // cout << a << endl;
-}
+    Solution slt = Solution();
+    string s = "III";
+    int result = slt.romanToInt(s);
 
+    cout << result << endl;
+}
 
 
 

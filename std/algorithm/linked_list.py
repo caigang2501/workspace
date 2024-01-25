@@ -68,33 +68,38 @@ def display(current_node):
         current_node = current_node.next
     print("None")
 
-class Solution:
-    def reverseKGroup(self, head, k: int):
-        i = 0
-        prev = None
-        tail1,tail2,curr = head,head,head
-        for _ in range(k-1):
-            head = head.next
-        while curr:
-            if i==k:
-                tail1.next = prev
-                tail1 = tail2
-                tail2 = curr
-                i = 0
-
+def reverseBetween(head, left: int, right: int):
+    tail,prev,curr = head,head,head
+    i = 1
+    if left==right:
+        return head
+    elif left==1:
+        curr,next = head.next,head.next
+        tail.next = None
+        i = 2
+    while i<=right:
+        if i < left-1:
+            curr = curr.next
+        elif i == left-1:
+            prev = curr
+            tail = curr
+            curr = curr.next
+            next = curr
+        else:
             next = curr.next
             curr.next = prev
             prev = curr
             curr = next
-            i += 1
-        tail1.next = prev
-        tail1 = tail2
-        tail2 = curr
+        i += 1
+    if tail.next==None:
+        tail.next = curr
+    else:
+        tail.next.next = curr
+        tail.next = prev
         return head
+    return prev
 
-l = LinkedList([1,2,3,4,5])
-# [[1,4,5],[1,3,4],[2,6]]
-lst = l.head
-s = Solution()
-a = s.reverseKGroup(lst,2)
+l = LinkedList([1,2])
+head = l.head
+a = reverseBetween(head,1,2)
 display(a)

@@ -3,10 +3,11 @@ from queue import Queue
 
 
 class TreeNode:
-    def __init__(self, val):
+    def __init__(self, val,next=None):
         self.val = val
         self.left = None
         self.right = None
+        self.next = next
 
 def list2tree(lst):
     if not lst:
@@ -145,32 +146,33 @@ def tree2list(root):
 
 #=======================test=================================
 
+
 class Solution:
-    def pathSum(self, root, targetSum: int) -> int:
-        self.targetSum = targetSum
-        self.n = 0
-        que = deque([])
-        def dfs_recursive(self,root,que):
-            que.append(root.val)
-            self.deal_que(que)
-            if root.left:
-                dfs_recursive(self,root.left,que.copy())
-            if root.right:
-                dfs_recursive(self,root.right,que.copy())
-            return
-        dfs_recursive(self,root,que)
-        return self.n
+    def connect(self, root):
+        if not root:
+            return []
 
-    def deal_que(self,que):
-        while sum(que)>self.targetSum:
-            que.popleft()
-        if sum(que)==self.targetSum:
-            self.n += 1
-            que.popleft()
+        curr = root
+        while curr:
+            curr.next = 1
+            curr = curr.right
+        curr = root
+        queue = deque([root])
+        while queue:
+            current = queue.popleft()
+            if curr.next==1:
+                curr.next = None
+            else:
+                curr.next = current
+            curr = current
+            if current.left:
+                queue.append(current.left)
+            if current.right:
+                queue.append(current.right)
 
-
+        return root
 s = Solution()
-root = list2tree([1,2,3,4,5,6,7])
-a = bfs(root)
+root = list2tree([1,2,3,4,5,None,7])
+a = s.connect(root)
 print(a)
 # root = list2tree([3,3,None,4,2])

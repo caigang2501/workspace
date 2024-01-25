@@ -4,7 +4,7 @@ from torchvision.utils import draw_bounding_boxes
 from torchvision.transforms.functional import to_pil_image
 
 import os
-img = read_image(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),'imgs/dogtwo1.jpg'))
+img = read_image(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))),'data/imgs/fire21.png'))
 
 
 # Step 1: Initialize model with the best available weights

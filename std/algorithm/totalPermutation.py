@@ -68,7 +68,29 @@ class Solution:
                 return True
         return False
     
+    def divsearch_pst(self,nums:list,target:int):
+        i = 0
+        j = len(nums)-1
+        if target<nums[0]:
+            return (-1,0)
+        elif nums[-1]<target:
+            return (j,j+1)
+        while j-i>1:
+            if target<nums[(j-i)//2+i]:
+                j = (j-i)//2+i
+            elif nums[(j-i)//2+i]<target:
+                i = (j-i)//2+i
+            else:
+                return ((j-i)//2+i,(j-i)//2+i)
+        return (i,j)
+
 a = [1,2,3,4,5]
+print(a[-1:])
 s = Solution()
-an = s.nCombination([1,2,3,4],3)
-print(an)
+ans = s.divsearch_pst([0,1,2,4,5],8)
+print(ans)
+
+
+
+
+

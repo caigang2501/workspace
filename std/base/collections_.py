@@ -1,7 +1,8 @@
 
 from collections import deque,Counter
 from queue import Queue,PriorityQueue
-
+from heapq import heappop,heappush,heapify
+from typing import List
 #deQue 队列两端高效地进行插入和删除操作
 def test_deque():
     llist = deque('12345')
@@ -44,8 +45,17 @@ def monotonic_stack(nums):
 
     return result
 
+def heaptest():
+    a = [8, 2, 6, 9, 3, 1, 4, 7]
+    heapify(a)  
+    heappush(a,5)
+    ans = []
+    while a:
+        ans.append(heappop(a))
+    return ans
 
 if __name__=='__main__':
-    test_queue()
+    r = heaptest()
     # test_counter()
     # print(monotonic_stack([2, 1, 2, 4, 3]))
+    print(r)
