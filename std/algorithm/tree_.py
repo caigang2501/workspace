@@ -1,5 +1,6 @@
 from collections import deque
 from queue import Queue
+from typing import List,Optional
 
 
 class TreeNode:
@@ -8,6 +9,7 @@ class TreeNode:
         self.left = None
         self.right = None
         self.next = next
+
 
 def list2tree(lst):
     if not lst:
@@ -47,6 +49,33 @@ def bfs(root):
             queue.append(current.left)
         if current.right:
             queue.append(current.right)
+
+    return result
+
+
+def bfs_by_layer(root):
+    if not root:
+        return []
+
+    result = []
+    lst_t = []
+    queue = deque([root])
+    dqt = deque()
+
+    while queue:
+        current = queue.popleft()
+        lst_t.append(current.val)
+
+        if current.left:
+            dqt.append(current.left)
+        if current.right:
+            dqt.append(current.right)
+        
+        if not queue:
+            queue = dqt.copy()
+            dqt.clear()
+            result.append(lst_t.copy())
+            lst_t.clear()
 
     return result
 
@@ -129,6 +158,17 @@ def postorder_traversal(root):
         postorder_traversal(root.right)
         print(root.val, end=" ")
 
+path = []
+def find_val(root:TreeNode,target:int,ancestors:List=[]):
+    ancestors.append(root.val)
+    global path
+    if root.val==target:
+        path = ancestors.copy()
+    if root.left and len(path)==0:
+        find_val(root.left,target,ancestors)
+    if root.right and len(path)==0:
+        find_val(root.right,target,ancestors)
+    ancestors.pop()
 #=======================tools=================================
 
 def tree2list(root):
@@ -146,33 +186,51 @@ def tree2list(root):
 
 #=======================test=================================
 
-
 class Solution:
-    def connect(self, root):
-        if not root:
-            return []
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        self.path = []
+        self.find = False
+        self.ancestors = []
+        self.p,self.q = p,q
+        self.root = root
+        self.node = root
+        return self.find_val(root)
 
-        curr = root
-        while curr:
-            curr.next = 1
-            curr = curr.right
-        curr = root
-        queue = deque([root])
-        while queue:
-            current = queue.popleft()
-            if curr.next==1:
-                curr.next = None
+    def find_val(self,root:TreeNode):
+        self.ancestors.append(root.val)
+        if root.val==self.p or root.val==self.q:
+            if len(self.path)==0:
+                self.path = self.ancestors.copy()
             else:
-                curr.next = current
-            curr = current
-            if current.left:
-                queue.append(current.left)
-            if current.right:
-                queue.append(current.right)
-
-        return root
+                self.node = self.get_node(self.root)
+                self.find = True
+        if root.left and not self.find:
+            self.find_val(root.left)
+        if root.right and not self.find:
+            self.find_val(root.right)
+        self.ancestors.pop()
+        return self.node
+    
+    def get_node(self,node: 'TreeNode'):
+        print(self.path)
+        print(self.ancestors)
+        i = 1
+        len_min = min(len(self.path),len(self.ancestors))
+        while i<len_min and self.path[i]==self.ancestors[i]:
+            if node.left and node.left.val==self.path[i]:
+                node = node.left
+            else:
+                node = node.right
+            i += 1
+        return node
 s = Solution()
-root = list2tree([1,2,3,4,5,None,7])
-a = s.connect(root)
-print(a)
+root = list2tree([3,5,1,6,2,0,8,None,None,7,4])
+# result = s.lowestCommonAncestor(root,6,4)
+print(bfs_by_layer(root))
 # root = list2tree([3,3,None,4,2])
+
+# 1 2 3 4 5 6 7  bfs
+# 1 2 4 5 3 6 7  dfs
+# 1 2 4 5 3 6 7  先
+# 4 2 5 1 6 3 7  中
+# 4 5 2 6 7 3 1  后

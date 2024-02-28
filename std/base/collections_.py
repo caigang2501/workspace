@@ -1,4 +1,4 @@
-
+import heapq
 from collections import deque,Counter
 from queue import Queue,PriorityQueue
 from heapq import heappop,heappush,heapify
@@ -22,11 +22,13 @@ def test_queue():
 # PriorityQueue
 def test_PriorityQueue():
     my_priority_queue = PriorityQueue()
-    my_priority_queue.put((1, "Priority 1"))
-    my_priority_queue.put((3, "Priority 3"))
-    my_priority_queue.put((2, "Priority 2"))
+    my_priority_queue.put((4, "Priority 3"))
+    my_priority_queue.put((-1, "Priority 1"))
+    my_priority_queue.put((3, "Priority 2"))
     element = my_priority_queue.get()
+    element1 = my_priority_queue.get()
     print(element)  # 输出: (1, 'Priority 1')
+    print(element1)  # 输出: (1, 'Priority 1')
 
 #Counter
 def test_counter():
@@ -55,7 +57,7 @@ def heaptest():
     return ans
 
 if __name__=='__main__':
-    r = heaptest()
+    r = monotonic_stack([1,5,2,4,3])
     # test_counter()
     # print(monotonic_stack([2, 1, 2, 4, 3]))
     print(r)

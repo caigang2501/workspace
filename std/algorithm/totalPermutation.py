@@ -20,33 +20,25 @@ class Solution:
         combin(l,[],0)
         return ans
     
-    #获取第k个排列 
+    #获取n排列的第k个排列 
     def getPermutation(self, n: int, k: int) -> str:
-        def perm(n:int) -> int:
-            k = 1
-            while n>0:
-                k *= n
-                n -= 1
-            return k
-        
         i = 1
         l = []
         ans = list(range(n))
         ans.append(n)
         ans.remove(0)
         
-        while perm(i)<k:
+        while math.factorial(i)<k:
             i += 1
             l.append(ans.pop())
             
         l.append(ans.pop())
         l.reverse()
         while i>0:
-            t = math.ceil(k/perm(i-1))
-            k = k % perm(i-1)
+            t = math.ceil(k/math.factorial(i-1))
+            k = k % math.factorial(i-1)
             ans.append(l.pop(t-1))                 
             i -= 1
-                
                 
         s = ""
         for x in ans:
@@ -85,10 +77,9 @@ class Solution:
         return (i,j)
 
 a = [1,2,3,4,5]
-print(a[-1:])
 s = Solution()
-ans = s.divsearch_pst([0,1,2,4,5],8)
-print(ans)
+ans = s.getPermutation(15,100000000000)
+print(ans,math.factorial(15))
 
 
 

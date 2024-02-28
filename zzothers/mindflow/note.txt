@@ -1,8 +1,8 @@
 pip install packagename --no-deps
 
-tar -cvf huabei.tar huabei
-scp huabei.tar root@10.83.40.175:caigang/
-tar -xvf huabei.tar
+tar -cvf danger_dtc_code.tar danger_detection
+scp danger_dtc_code.tar root@10.83.40.175:caigang/
+tar -xvf danger_dtc_code.tar 
 tar -xvzf filename.tgz
 
 rm -rf directoryname
