@@ -1,0 +1,20 @@
+《流形拓扑学导论》（Introduction to Topological Manifolds）
+
+作者：John M. Lee
+这本书是学习流形拓扑学的入门教材，适合有一定拓扑学基础的学生。它清晰地介绍了拓扑空间、流形和流形上的微分结构。
+《流形学》（Manifolds and Differential Geometry）
+
+作者：Jeffrey M. Lee
+该教材着重介绍微分几何和流形理论，适合想深入了解微分几何的学生。它包含了对流形、张量、黎曼度量等概念的详细阐述。
+《微分拓扑学初步》（A First Course in Differential Topology）
+
+作者：Czes Kosniowski
+这本书是关于微分拓扑学的入门教材，介绍了流形、向量场、微分形式等基本概念，适合初学者。
+《流形学习和流形识别》（Manifold Learning and Recognition）
+
+作者：Bo Wang, Jieping Ye
+该书探讨了流形学习在模式识别和机器学习中的应用。它结合了数学理论和实际应用，适合对流形学习感兴趣的学生。
+《微分几何引论》（Introduction to Smooth Manifolds）
+
+作者：John M. Lee
+这是 Lee 教授的另一本经典教材，介绍了流形和微分几何的基本理论。与前述的《流形拓扑学导论》结合起来，可以形成比较完整的学习路径。

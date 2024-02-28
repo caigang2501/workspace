@@ -20,3 +20,4 @@ def disjoint_set(edges):
     return parts
 
 print(disjoint_set([[6,7],[1,2],[4,5],[2,3],[5,6]]))
+
