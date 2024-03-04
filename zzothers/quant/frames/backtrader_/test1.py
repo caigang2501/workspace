@@ -12,10 +12,12 @@ data = bt.feeds.Quandl(
     dataname='AAPL',
     fromdate=datetime(2010, 1, 1),
     todate=datetime(2020, 1, 1),
-    access_key= my_api_key
+    access_key= my_api_key, 
+    # compression=240,
+    timeframe = 5
 )
 
-# AAPL AMD MSFT GOOGL
+# AAPL AMD MSFT GOOGL TSLA YHOO
 # 道琼斯指数（Dow Jones Industrial Average）的代码为 "^DJI"。
 # 纳斯达克指数（NASDAQ Composite Index）的代码为 "^IXIC"。
 
@@ -23,13 +25,19 @@ cerebro = bt.Cerebro()
 cerebro.adddata(data)
 cerebro.run()
 close_prices = np.array([data.lines[0].get(size=len(data))])
+low_prices = np.array([data.lines[1].get(size=len(data))])
+high_prices = np.array([data.lines[2].get(size=len(data))])
+open_prices = np.array([data.lines[3].get(size=len(data))])
+volume = np.array([data.lines[4].get(size=len(data))])
+datetime_ = np.array([data.lines[6].get(size=len(data))])
 
-fs = 1000  # 采样频率
-t = np.arange(0, 1, 1/fs)
-signal = 5 * np.sin(2 * np.pi * 50 * t) + 3 * np.sin(2 * np.pi * 120 * t)
 
-print(type(close_prices),close_prices)
-print(type(data))
+print(len(data))
+print(close_prices)
+print(low_prices)
+print(high_prices)
+print(open_prices)
+print(datetime_)
 # 提取收盘价数据
 close_prices = data.close.get(size=len(data))
 

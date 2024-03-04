@@ -32,3 +32,21 @@ PyAlgoTrade: 使用 Python 编写的开源算法交易库，支持事件驱动�
 vn.py: 一个基于 Python 的开源框架，专注于连接和交互不同的交易所。它提供了对国内和国际交易所的支持，适用于期货和股票交易。
 
 Quantlib-Python: Quantlib 的 Python 封装，提供了 Quantlib 的功能，并使其更容易在 Python 中使用。
+
+总结：
+    如果您需要执行更复杂的金融计算，QuantLib可能更适合您。如果您想在云端进行回测，Quantopian是一个好选择。
+    如果您想在本地回测和实时交易，Backtrader和PyAlgoTrade可能更适合您。
+    如果您需要技术分析工具，Ta-Lib是一个很好的选择。
+    如果您需要使用Python连接多个交易平台，vnpy可能是更好的选择
+
+相关性：
+    滞后相关性函数(Lag Correlation Function)
+    ARCH/GARCH模型
+
+
+
+
+
+
+
+    

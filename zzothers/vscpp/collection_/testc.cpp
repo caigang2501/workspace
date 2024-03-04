@@ -5,6 +5,7 @@
 #include <list>
 #include <vector>
 #include <map>
+#include <unordered_map>
 #include <set>
 #include <queue>
 #include <numeric>
@@ -33,18 +34,19 @@ using namespace std;
 // 在需要频繁访问元素或在尾部进行插入和删除操作时效率较高。
 // 头文件：<vector>
 void test(){
-    array<int, 5> arr1 = {1, 2, 3, 4, 5};
-    cout << arr1 << endl;
+    array<int, 5> arr1 = {1, 2, 3, 4};
+    arr1[4] = 9;
+    for (int num : arr1) {
+        cout << num << " ";
+    }
 }
 
-int main(){
-    test();
-}
+
 
 // ======================array======================
 void testarr() {
     array<int, 5> arr1 = {1, 2, 3, 4, 5};
-
+    
     arr1[3] = 10;
     for (int num : arr1) {
         cout << num << " ";
@@ -83,7 +85,7 @@ void testvec(){
 
     //创建二维vector
     vector<vector<int>> matrix = {{1,2},{3,4},{5,6}};
-    vector<std::vector<int>> matrix(2,vector<int>(3, 0));
+    vector<std::vector<int>> matrix1(2,vector<int>(3, 0));
     
 
     //常用操作
@@ -103,9 +105,48 @@ void testvec(){
 // ======================map======================
 void testmap(){
     map<int, string> myMap = {{1, "apple"}, {2, "banana"}, {3, "orange"}};
+
+    // insert
     myMap[4] = "pear";
+    myMap.insert(std::make_pair(5, "five"));
+
+    // find
+    auto it = myMap.find(1);
+    if (it != myMap.end()) {
+        std::cout << "Found: " << it->second << std::endl;
+    } else {
+        std::cout << "Not found" << std::endl;
+    }
+
+    // delete
+    myMap.erase(1);
+
+    // traverse
     for (const auto& pair : myMap) {
         std::cout << pair.first << ": " << pair.second << std::endl;
+    }
+}
+
+void testunorder_map(){
+    std::unordered_map<int, string> myMap = {{1, "apple"}, {2, "banana"}, {3, "orange"}} ;
+
+    // insert
+    myMap.insert(std::make_pair(4, "Four"));
+    myMap[5] = "Five";
+
+    // find
+    auto it = myMap.find(3);
+    if (it != myMap.end()) {
+        std::cout << "Found: " << it->second << std::endl;
+    } else {
+        std::cout << "Not found" << std::endl;
+    }
+    // delete
+    myMap.erase(1);
+
+    // traverse
+    for (auto it = myMap.begin(); it != myMap.end(); ++it) {
+        cout << it->first << ": " << it->second << std::endl;
     }
 }
 
@@ -123,3 +164,15 @@ void testset(){
 void testqueue(){
     queue<int> q1;
 }
+
+
+
+int main(){
+    std::unordered_map<int, string> myMap = {{1, "apple"}, {2, "banana"}, {3, "orange"}} ;
+    cout << myMap.size();
+}
+
+
+
+
+

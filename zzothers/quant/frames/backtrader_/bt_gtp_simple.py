@@ -74,9 +74,9 @@ if __name__ == '__main__':
     
     # 获取 Quandl 数据
     data = bt.feeds.Quandl(
-        dataname='DJI',
-        fromdate=datetime(1990, 1, 1),
-        todate=datetime(2024, 1, 1),
+        dataname='AAPL',
+        fromdate=datetime(2010, 1, 1),
+        todate=datetime(2020, 1, 1),
         access_key= my_api_key
     )
     # 道琼斯指数（Dow Jones Industrial Average）的代码为 "^DJI"。
