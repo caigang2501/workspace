@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "d:/gitreps/workspace/vscpp/base",
-      "program": "d:/gitreps/workspace/vscpp/base/build/Debug/outDebug",
+      "cwd": "d:/gitreps/workspace/zzothers/vscpp/base",
+      "program": "d:/gitreps/workspace/zzothers/vscpp/base/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
