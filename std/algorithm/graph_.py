@@ -1,3 +1,5 @@
+from collections import deque
+
 
 # 并查集
 def disjoint_set(edges):
@@ -20,4 +22,22 @@ def disjoint_set(edges):
     return parts
 
 print(disjoint_set([[6,7],[1,2],[4,5],[2,3],[5,6]]))
+
+def bfs_linked(i,j,graph):
+    visited = [0]*len(graph)
+    shortest_path = 0
+    bucket = deque([i])
+    visited[i] = 1
+    while bucket:
+        curr = bucket.popleft()
+        for n in graph[curr]:
+            if not visited[n]:
+                bucket.append(n)
+                if n==j:
+                    return True
+        shortest_path += 1
+    
+    return False
+        
+
 
