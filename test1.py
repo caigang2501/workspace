@@ -1,15 +1,11 @@
-from multiprocessing import Process
-import os
-from typing import List
 
-import time
 
-from multiprocessing import Process, Pipe
 
-def f(conn=2):
-    print(conn)
+board = [1,1,2,0,3]
+paths = [0,2]
 
-if __name__ == '__main__':
-    p = Process(target=f)
-    p.start()
-    p.join()
+paths = [path+1 for path in paths if board[path+1]!=0]
+
+while [0]:
+    print('asdfaf')
+    break

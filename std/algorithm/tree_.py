@@ -187,45 +187,27 @@ def tree2list(root):
 #=======================test=================================
 
 class Solution:
-    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
-        self.path = []
-        self.find = False
-        self.ancestors = []
-        self.p,self.q = p,q
-        self.root = root
-        self.node = root
-        return self.find_val(root)
-
-    def find_val(self,root:TreeNode):
-        self.ancestors.append(root.val)
-        if root.val==self.p or root.val==self.q:
-            if len(self.path)==0:
-                self.path = self.ancestors.copy()
-            else:
-                self.node = self.get_node(self.root)
-                self.find = True
-        if root.left and not self.find:
-            self.find_val(root.left)
-        if root.right and not self.find:
-            self.find_val(root.right)
-        self.ancestors.pop()
-        return self.node
-    
-    def get_node(self,node: 'TreeNode'):
-        print(self.path)
-        print(self.ancestors)
-        i = 1
-        len_min = min(len(self.path),len(self.ancestors))
-        while i<len_min and self.path[i]==self.ancestors[i]:
-            if node.left and node.left.val==self.path[i]:
-                node = node.left
-            else:
-                node = node.right
-            i += 1
-        return node
+    def flatten(self, root: Optional[TreeNode]) -> None:
+        if root:
+            self.flatten_(root)
+    def flatten_(self, root: Optional[TreeNode]):
+        if root.left:
+            left,tail = self.flatten_(root.left)
+            root.left = None
+            right = root.right
+            root.right = left
+            if right:
+                tail.right = right
+                _,tail = self.flatten_(right)
+        elif root.right:
+            _,tail = self.flatten_(root.right)
+            return root,tail
+        else:
+            return root,root
+        return root,tail
 s = Solution()
-root = list2tree([3,5,1,6,2,0,8,None,None,7,4])
-# result = s.lowestCommonAncestor(root,6,4)
+root = list2tree([1,2,None,None,3])
+result = s.flatten(root)
 print(bfs_by_layer(root))
 # root = list2tree([3,3,None,4,2])
 

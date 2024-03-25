@@ -34,23 +34,35 @@ def demo3():
         results = pool.starmap(worker, [(i, 20) for i in range(6)])
         print(results)
 
-def demo4_sub(m,arr):
+def demo4_sub(shared_value):
+    # 在进程中递增共享的整数值
+    with shared_value.get_lock():
+        shared_value.value += 1
+
+def demo4():
+    shared_value = mp.Value('i', 0)
+    p = mp.Process(target=demo4_sub,args=(shared_value,))
+    p.start()
+    p.join()
+
+    print("Final shared value:", shared_value.value)
+
+def demo5_sub(m,dic):
     with mp.Pool(processes=3) as pool:
         results = pool.map(worker, [m+i for i in range(6)])
-        arr[m] = results
-def demo4():
+        dic[m] = results
+def demo5():
     with mp.Manager() as mg:
         mg_dic = mg.dict()
-        p0 = mp.Process(target=demo4_sub,args=(10,mg_dic))
-        p1 = mp.Process(target=demo4_sub,args=(20,mg_dic))
-        p0.start()
-        p1.start()
-        p0.join()
-        p1.join()
+        p0 = mp.Process(target=demo5_sub,args=(10,mg_dic))
+        p1 = mp.Process(target=demo5_sub,args=(20,mg_dic))
+        p0.start(),p1.start()
+        p0.join(),p1.join()
         print(mg_dic)
 
 if __name__=='__main__':
-    demo4() 
+
+    demo5() 
 
 
 
