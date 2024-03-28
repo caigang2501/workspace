@@ -6,6 +6,7 @@ tar -xvf danger_dtc_code.tar
 tar -xvzf filename.tgz
 
 rm -rf directoryname
+scp main.py root@10.83.40.175:caigang/danger_detection/main.py
 
 pip install markdown -i https://pypi.tuna.tsinghua.edu.cn/simple
 pip install markdown -i https://mirrors.aliyun.com/pypi/simple/
