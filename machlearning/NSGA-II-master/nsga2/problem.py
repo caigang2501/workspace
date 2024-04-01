@@ -12,8 +12,7 @@ class Problem:
         self.variables_range = []
         if same_range:
             for _ in range(num_of_variables):
-                # self.variables_range.append(variables_range[0])
-                self.variables_range.append(variables_range[_])
+                self.variables_range.append(variables_range[0])
         else:
             self.variables_range = variables_range
 

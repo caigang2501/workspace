@@ -78,50 +78,6 @@ int main() {
 }
 
 
-#include <queue>
-using namespace std;
-
-// 假设 TreeNode 类已经定义
-class Solution {
-public:
-    int minDepth(TreeNode* root) {
-        if (!root) {
-            return 0;
-        }
-
-        queue<TreeNode*> q;
-        queue<TreeNode*> temp;
-        int depth = 1;
-
-        q.push(root);
-
-        while (!q.empty()) {
-            TreeNode* current = q.front();
-            q.pop();
-
-            if (!current->left && !current->right) {
-                return depth;
-            } else {
-                if (current->left) {
-                    temp.push(current->left);
-                }
-                if (current->right) {
-                    temp.push(current->right);
-                }
-            }
-
-            if (q.empty()) {
-                q = temp;
-                while (!temp.empty()) {
-                    temp.pop();
-                }
-                depth++;
-            }
-        }
-        // 返回深度
-        return depth;
-    }
-};
 
 
 

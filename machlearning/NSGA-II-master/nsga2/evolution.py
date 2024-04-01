@@ -35,7 +35,7 @@ class Evolution:
             new_population.extend(self.population.fronts[front_num][0:self.num_of_individuals - len(new_population)])
             returned_population = self.population
             self.population = new_population
-            self.utils.fast_nondominated_sort(self.population)
+            self.utils.fast_nondominated_sort(self.population) 
             for front in self.population.fronts:
                 self.utils.calculate_crowding_distance(front)
             children = self.utils.create_children(self.population)

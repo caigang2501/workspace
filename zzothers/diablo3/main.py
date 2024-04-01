@@ -127,18 +127,14 @@ def decompose_legend():
         y = 777+i*134
         for j in range(10):
             x = 1906+j*67
-            color1 = pyautogui.pixel(x+10,y+10)
-            color2 = pyautogui.pixel(x-10,y+10)
-            color3 = pyautogui.pixel(x-10,y-10)
-            color4 = pyautogui.pixel(x+10,y-10)
-            cond_a = color1[0]>16 or color1[1]>15 or color1[2]>10
-            cond_b = color2[0]>15 or color2[1]>15 or color2[2]>10
-            cond_c = color3[0]>18 or color3[1]>15 or color3[2]>10
-            cond_d = color4[0]>18 or color4[1]>17 or color4[2]>10
-            if cond_a + cond_b + cond_c + cond_d>2:
-                time.sleep(0.04)
+            c1 = max(pyautogui.pixel(x+10,y+10))
+            c2 = max(pyautogui.pixel(x-10,y+10))
+            c3 = max(pyautogui.pixel(x-10,y-10))
+            c4 = max(pyautogui.pixel(x+10,y-10))
+            if (c1>20)+(c2>20)+(c3>20)+(c4>20)>0:
+                time.sleep(0.1)
                 win32_click(x, y)
-                time.sleep(0.02)
+                time.sleep(0.05)
                 # win32_click(1137, 496)
                 keyboard.press_and_release('enter')
     # win32_click(button='right')
