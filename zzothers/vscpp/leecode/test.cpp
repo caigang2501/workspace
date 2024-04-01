@@ -37,28 +37,20 @@ void print2d(const Container& container) {
 
 class Solution {
 public:
-    int romanToInt(string s) {
-        unordered_map<char, int> map = {{'I', 1}, {'V', 5}, {'X', 10},{'L', 50}, {'C', 100},{'D', 500}, {'M', 1000}};
-        int ans = 0;
-        int i = 1;
-        while(i<s.size()){
-            if(map[s[i-1]]>=map[s[i]]){
-                ans += map[s[i-1]];
-            }else{
-                ans -= map[s[i-1]];
-            };
-            i += 1;
-        };
-        ans += map[s[i-1]];
-        return ans;
+    int searchInsert(vector<int>& nums, int target) {
+        for (int i = 0; i < nums.size(); ++i) {
+            if (target<=nums[i]){
+                return i;
+            }
+        }
+        return -1;
     }
 };
 
 int main(){
-    Solution slt = Solution();
-    string s = "III";
-    int result = slt.romanToInt(s);
-
+    Solution s = Solution();
+    vector<int> lst = {1,2,4,5};
+    int result = s.searchInsert(lst,3);
     cout << result << endl;
 }
 

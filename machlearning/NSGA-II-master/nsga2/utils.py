@@ -74,7 +74,7 @@ class NSGA2Utils:
     def create_children(self, population):
         children = []
         while len(children) < len(population):
-            parent1 = self.__tournament(population)
+            parent1 = self.__tournament(population) # 选择更小更孤立的个体
             parent2 = parent1
             while parent1 == parent2:
                 parent2 = self.__tournament(population)
