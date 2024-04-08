@@ -7,10 +7,13 @@ import matplotlib.pyplot as plt
 
 def f1(x):
     return x ** 2
-
-
 def f2(x):
     return (x - 2) ** 2
+
+def f3(x,y):
+    return x**2+y**2
+def f4(x,y):
+    return (x-2)**2+(y+2)**2
 
 
 problem = Problem(objectives=[f1, f2], num_of_variables=1, variables_range=[(-55, 55)])
