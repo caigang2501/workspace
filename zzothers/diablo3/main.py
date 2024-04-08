@@ -158,7 +158,7 @@ def start_auto_cast():
     curr_time = [0]
     keyboard.press('1')
     while keyboard.is_pressed('f3')==False:
-        auto_cast(0,1,1,2,1)
+        auto_cast(0,1,1,1,1)
         repeat(curr_time,3)
         time.sleep(0.5)
     keyboard.release('1')
