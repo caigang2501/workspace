@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "d:/gitreps/workspace/zzothers/vscpp/base",
-      "program": "d:/gitreps/workspace/zzothers/vscpp/base/build/Debug/outDebug",
+      "cwd": "d:/workspace/workspace/zzothers/vscpp",
+      "program": "d:/workspace/workspace/zzothers/vscpp/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
@@ -19,6 +19,14 @@
           "ignoreFailures": true
         }
       ]
+    },
+    {
+      "type": "cmake",
+      "request": "launch",
+      "name": "Debug portfile(s)",
+      "cmakeDebugType": "external",
+      "pipeName": "\\\\.\\pipe\\vcpkg_ext_portfile_dbg",
+      "preLaunchTask": "Debug vcpkg commands"
     }
   ]
 }

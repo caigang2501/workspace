@@ -10,6 +10,7 @@
 #include <queue>
 #include <numeric>
 
+
 using namespace std;
 
 // array（数组）：
@@ -153,11 +154,17 @@ void testunorder_map(){
 // ======================set======================
 
 void testset(){
+    
     set<int> mySet = {1, 2, 3, 4, 5};
     mySet.insert(6);
     for (const auto& value : mySet) {
         std::cout << value << " ";
     }
+
+    // 转型
+    vector<int> vec = {1, 2, 3, 4, 5};
+    //set<int> vec2set = set(vec.begin(),vec.end());
+
 }
 
 // ======================queue======================

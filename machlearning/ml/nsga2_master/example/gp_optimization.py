@@ -17,7 +17,10 @@ C_HS = 0.023
 N_EB = 0.97
 N_SH = 0.87
 
+A_CO2 = 0.853
 SELL_PRICE = 0.4
+
+save_path = 'machlearning/nsga2_master/example/result/'
 
 def calculate(individual:Individual):
     cost_money = 0
@@ -51,38 +54,43 @@ def f1(individual:Individual):
     return calculate(individual)
 
 def f2(individual:Individual):
-    cost_elic = 0
-    i = 0
-    for peb in individual.features:
-        a,b,c,d,e,f,g = table_p[i]
-        cost_elic += peb+b
-        i += 1
-    return cost_elic
+    elic_buy = sum([-row[-1] if row[-1]<0 else 0 for row in individual.ans])
+    return elic_buy*A_CO2
 
 
 def solve():
-    save_path = 'machlearning/nsga2_master/example/result/'
-    problem = Problem(objectives=[f1, f2], num_of_variables=24, variables_range=[(0,3)])
+    problem = Problem(objectives=[f1,f2], num_of_variables=24, variables_range=[(0,3)])
     evo = Evolution(problem,10000,15)
     evol = evo.evolve()
     with pd.ExcelWriter(f'{save_path}ans.xlsx') as writer:
-        for i,individral in enumerate(evol):
-            df_ansx = pd.DataFrame(individral.ans,columns=['time','pwt','ppv','peb','qch','qdis','hhst','pgt'])
+        for i,individual in enumerate(evol):
+            df_ansx = pd.DataFrame(individual.ans,columns=['time','pwt','ppv','peb','qch','qdis','hhst','pgt'])
             # df_ansx.to_csv(f'{save_path}ans_{i}.csv',index=False)
-            name = ''.join([str(round(cost)) for cost in individral.objectives])
+            name = ' '.join([str(round(cost)) for cost in individual.objectives])
             df_ansx.to_excel(writer, sheet_name=name, index=False)
     func = [i.objectives for i in evol]
 
     function1 = [i[0] for i in func]
     function2 = [i[1] for i in func]
     plt.xlabel('cost_money', fontsize=15)
-    plt.ylabel('cost_elic', fontsize=15)
+    plt.ylabel('DIS_CO2', fontsize=15)
     plt.scatter(function1, function2)
     plt.savefig(f'{save_path}ans.png')
     plt.show()
 
+def test():
+    individual = Individual()
+    individual.features = [0,0,0,0,0,67.57731959,35.03092784,27.55670103,33.87628866,92.37113402,119.1958763,101.1649485,111.7319588,115.0721649,187.3814433,73.71134021,96.8556701,144.2886598,264,400,400,400,400,400]
+    result = calculate(individual)
+    print(result)
+    df_ansx = pd.DataFrame(individual.ans,columns=['time','pwt','ppv','peb','qch','qdis','hhst','pgt'])
+    name = ' '.join([str(round(cost)) for cost in individual.objectives])
+    df_ansx.to_csv(f'{save_path}{name}.csv',index=False)
+
 if __name__=='__main__':
     solve()
+    # test()
+
 
 
 

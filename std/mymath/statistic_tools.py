@@ -4,6 +4,7 @@ import random
 
 def plot_distribution(getrandom,*args,num_samples=100000):
     samples = [getrandom(*args) for _ in range(num_samples)]
+    # samples = [i for i in samples if i<70]
     print(samples[0])
     print(min(samples),max(samples))
     plt.hist(samples, bins=30, density=True, alpha=0.7, color='b')

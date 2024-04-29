@@ -38,7 +38,7 @@ class Problem:
             heat_rest_p = (1-T_SH)*heat_rest_p+(peb-row[2]*N_EB)*N_SH
 
         return individual
-
+    
     def calculate_objectives(self, individual):
         individual.objectives = [f(individual) for f in self.objectives]
 

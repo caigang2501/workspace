@@ -40,6 +40,8 @@ class NSGA2Utils:
         for _ in range(self.num_of_individuals):
             individual = self.problem.generate_individual()
             self.problem.calculate_objectives(individual)
+            # if _ < 2:
+            #     individual.features = [0,0,0,0,0,67.57731959,35.03092784,27.55670103,33.87628866,92.37113402,119.1958763,101.1649485,111.7319588,115.0721649,187.3814433,73.71134021,96.8556701,144.2886598,264,400,400,400,400,400]
             population.append(individual)
         return population
 

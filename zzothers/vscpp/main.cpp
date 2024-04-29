@@ -34,24 +34,15 @@ void print2d(const Container& container) {
     cout << endl;
 }
 
-
-class Solution {
-public:
-    int searchInsert(vector<int>& nums, int target) {
-        for (int i = 0; i < nums.size(); ++i) {
-            if (target<=nums[i]){
-                return i;
-            }
-        }
-        return -1;
-    }
-};
+#include "utils/calculator.h"
+// #include <boost/algorithm/string.hpp>
 
 int main(){
-    Solution s = Solution();
-    vector<int> lst = {1,2,4,5};
-    int result = s.searchInsert(lst,3);
-    cout << result << endl;
+    // Solution s = Solution();
+    // vector<int> lst = {1,2,4,5};
+    // vector<int> result = s.intersection(lst,lst);
+    int c = add_(1,3);
+    cout << c << endl;
 }
 
 
