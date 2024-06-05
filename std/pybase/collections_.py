@@ -1,13 +1,14 @@
-import heapq
+import heapq,bisect
 from collections import deque,Counter
 from queue import Queue,PriorityQueue
-from heapq import heappop,heappush,heapify
+from heapq import heappop,heappush,heapify,_heapify_max
 from typing import List
-#deQue 队列两端高效地进行插入和删除操作
+
 def test_deque():
     llist = deque('12345')
     llist.append('6')
     llist.appendleft('0')
+    llist.pop()
     print(llist)
 
 
@@ -48,16 +49,14 @@ def monotonic_stack(nums):
     return result
 
 def heaptest():
-    a = [8, 2, 6, 9, 3, 1, 4, 7]
+    a = [8, 6, 9, 3, 1, 4]
     heapify(a)  
-    heappush(a,5)
-    ans = []
-    while a:
-        ans.append(heappop(a))
-    return ans
+    heappush(a,2)
+    # min_ = heappop(a)
+    print(round(a[1],5))
+    # bisect.insort()
 
 if __name__=='__main__':
-    r = monotonic_stack([1,5,2,4,3])
-    # test_counter()
-    # print(monotonic_stack([2, 1, 2, 4, 3]))
-    print(r)
+    # heaptest()
+    test_counter()
+

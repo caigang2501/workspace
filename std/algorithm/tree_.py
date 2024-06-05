@@ -187,28 +187,24 @@ def tree2list(root):
 #=======================test=================================
 
 class Solution:
-    def flatten(self, root: Optional[TreeNode]) -> None:
-        if root:
-            self.flatten_(root)
-    def flatten_(self, root: Optional[TreeNode]):
-        if root.left:
-            left,tail = self.flatten_(root.left)
-            root.left = None
-            right = root.right
-            root.right = left
-            if right:
-                tail.right = right
-                _,tail = self.flatten_(right)
-        elif root.right:
-            _,tail = self.flatten_(root.right)
-            return root,tail
+    def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
+        self.max_d = 0
+        self.longest_path(root)
+        return self.max_d
+
+    def longest_path(self,node):
+        if not node.left and not node.right:
+            return 0
         else:
-            return root,root
-        return root,tail
+            left = self.longest_path(node.left)+1 if node.left else 0
+            right = self.longest_path(node.right)+1 if node.right else 0
+            self.max_d = max(self.max_d,left+right)
+            return max(left,right)
+
 s = Solution()
-root = list2tree([1,2,None,None,3])
-result = s.flatten(root)
-print(bfs_by_layer(root))
+root = list2tree([1,2,3,4,5])
+result = s.diameterOfBinaryTree(root)
+print(result)
 # root = list2tree([3,3,None,4,2])
 
 # 1 2 3 4 5 6 7  bfs

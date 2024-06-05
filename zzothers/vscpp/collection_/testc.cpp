@@ -172,11 +172,20 @@ void testqueue(){
     queue<int> q1;
 }
 
+// ======================string======================
+void teststring(){
+    string s = "asdfasdf";
+    vector<char> v = {'a','s'};
+    string vs(v.begin(),v.end());
+    s[0] = 'c';
+    cout << vs << endl;
+}
+
 
 
 int main(){
     std::unordered_map<int, string> myMap = {{1, "apple"}, {2, "banana"}, {3, "orange"}} ;
-    cout << myMap.size();
+
 }
 
 

@@ -1,7 +1,8 @@
 NFD2=Whk$VK!EEf
 microsf：MQK6@Sov$JG%nd
 顺义：101300
-Tax ID: 91110108MACFRY6X0M
+ali_server: root@47.121.137.79
+github_token: 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 (util 24.09.01)
 
 10.83.37.57
 ssh root@10.83.190.87 

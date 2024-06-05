@@ -2,6 +2,7 @@ pip install packagename --no-deps
 
 tar -cvf danger_dtc_code.tar danger_detection
 scp danger_dtc_code.tar root@10.83.40.175:caigang/
+scp danger_dtc_code.tar user@10.83.190.141:caigang/   R8z@6cDY
 tar -xvf danger_dtc_code.tar 
 tar -xvzf filename.tgz
 

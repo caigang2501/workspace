@@ -13,5 +13,15 @@
   "vcpkg.target.preferSystemLibs": false,
   "vcpkg.target.useManifest": true,
   "vcpkg.general.enable": true,
-  "vcpkg.target.hostTriplet": "x64-windows"
+  "vcpkg.target.hostTriplet": "x64-windows",
+  "files.associations": {
+    "ostream": "cpp",
+    "random": "cpp",
+    "iostream": "cpp",
+    "string": "cpp",
+    "string_view": "cpp",
+    "rope": "cpp",
+    "*.tcc": "cpp"
+  },
+  "C_Cpp.default.compilerPath": "C:\\msys64\\ucrt64\\bin\\gcc.exe"
 }

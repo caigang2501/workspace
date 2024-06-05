@@ -9,3 +9,5 @@ exec_result = namespace['my_function']
 
 x = exec_result()
 print(x)
+
+
