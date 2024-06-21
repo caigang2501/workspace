@@ -12,7 +12,7 @@ def test():
 
     arr = [2,3,1]
     sorted_indices = sorted(range(len(arr)), key=lambda k: arr[k])
-
+    
 if __name__=='__main__':
     pass
 

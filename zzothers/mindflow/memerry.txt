@@ -1,9 +1,14 @@
-NFD2=Whk$VK!EEf
-microsf：MQK6@Sov$JG%nd
+NFD2=Whk$VK!EEf$R
+microsf：MQK6@Sov$JG%nd$g
 顺义：101300
-ali_server: root@47.121.137.79
+
+ali_server: root@47.121.137.79 
+mysqlsh mysql://root:qwer1234@localhost:3306
+docker run --name myserver -e MYSQL_ROOT_PASSWORD=qwer1234 -p 3306:3306 -d mysql:latest
+docker exec -it myserver  mysql -u root -p
+bind-address = 0.0.0.0
+
 github_token: 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 (util 24.09.01)
 
-10.83.37.57
-ssh root@10.83.190.87 
-admin@1234
+ssh root@10.83.190.87  (admin@1234)
+

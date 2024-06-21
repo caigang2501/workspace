@@ -34,7 +34,9 @@ def test_PriorityQueue():
 #Counter
 def test_counter():
     l = [1,1,2,3,3,4]
-    print(Counter(l))
+    ct = Counter(l)
+    for p in ct.items():
+        print(p)
 
 # 单调栈 每个元素的下一个更大元素位置
 def monotonic_stack(nums):
@@ -49,14 +51,17 @@ def monotonic_stack(nums):
     return result
 
 def heaptest():
-    a = [8, 6, 9, 3, 1, 4]
-    heapify(a)  
-    heappush(a,2)
+    a = [8, 6, 9, 5, 1, 4]
+    _heapify_max(a)  
+    # heappush(a,2)
     # min_ = heappop(a)
-    print(round(a[1],5))
+    a.remove(1)
+    print(a[0])
     # bisect.insort()
 
 if __name__=='__main__':
-    # heaptest()
-    test_counter()
+    heaptest()
+    # lst = [8, 6, 9, 3, 1, 4]
+    # result = monotonic_stack(lst)
+    # print(result)
 

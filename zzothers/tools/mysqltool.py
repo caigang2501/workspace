@@ -1,7 +1,7 @@
 
 import mysql.connector
 import pymysql
-from sqlachemy import create_engine
+from sqlalchemy import create_engine
 
 
 def getdb():

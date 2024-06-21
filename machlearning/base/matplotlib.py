@@ -7,8 +7,11 @@ import matplotlib.image as mpimg
 
 
 img = (np.random.randn(15,15)+2.5)*50//1
-plt.imshow(img)
+plt.imshow(img, cmap='viridis', interpolation='none')
+plt.colorbar()  
+plt.title('Random Image from numpy')
 plt.show()
+
 img = Image.fromarray(img)
 # img = mpimg.imread('tangwei.jpg')
 plt.imshow(img)

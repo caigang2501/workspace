@@ -1,10 +1,13 @@
 # 使用一个基础的 Python 镜像
-FROM flask
+FROM danger_dtc_env2
 
 # 设置工作目录
-WORKDIR /helloflask
+WORKDIR /danger_detection
 # 复制当前目录下的所有文件到工作目录
 COPY . .
+
+#USER root
+#RUN apt-get update && apt-get install -y tesseract-ocr
 
 # 安装依赖
 #RUN pip install --ignore-installed -r requirements.txt
@@ -22,8 +25,8 @@ CMD ["flask", "run", "--host=0.0.0.0"]
 
 
 # docker build -t danger_dtc1 .
-# docker save -o danger_env.tar danger_dtc_env
-# scp danger_env.tar root@10.83.40.175:caigang
+# docker save -o danger_dtc.tar danger_dtc
+# scp danger_dtc.tar root@10.83.40.175:caigang
 # docker load -i danger_dtc.tar
 # docker run -d -p 8088:5000 danger_dtc1
 # docker run -it -p 5010:5000 danger_dtc bash

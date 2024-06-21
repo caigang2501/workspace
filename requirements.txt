@@ -1,2 +1,11 @@
 torch
 scikit-learn
+
+
+
+
+
+
+
+mysql-connector-python
+sqlalchemy

@@ -5,7 +5,7 @@ from keras import datasets
 import matplotlib.pyplot as plt
 
 
-(x, y), (x_val, y_val) = datasets.mnist.load_data()
+(x, y), (x_val, y_val) = datasets.mnist.load_data() # 28*28
 x = x.reshape(60000,784)
 x = x/255*2 - 1
 x_val = x_val.reshape(10000,784)
@@ -73,6 +73,11 @@ while e<50:
     
     w00temp = layers[0][400].copy()
     e += 1
-
+    
+    # if e%1==0:
+    #     for i in range(10):
+    #         img = layers[0].T[i].reshape(28,28)
+    #         plt.imshow(img) 
+    #         plt.show()
 
 

@@ -19,3 +19,14 @@ pip install markdown -i http://pypi.douban.com/simple/
 自回归滑动平均模型（ARMA模型）
 差分自回归滑动平均模型（ARIMA模型）
 格兰杰因果关系（Granger Causality）
+
+
+linux:
+cat /etc/os-release
+hostnamectl
+lsb_release -a
+
+
+
+
+
