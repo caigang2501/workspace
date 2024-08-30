@@ -1,5 +1,5 @@
-from nsga2_gp.utils import NSGA2Utils
-from nsga2_gp.population import Population
+from nsga2_test.utils import NSGA2Utils
+from nsga2_test.population import Population
 from tqdm import tqdm
 
 

@@ -1,8 +1,8 @@
 import sys,os
 sys.path.append(os.getcwd())
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-from nsga2_gp.individual import Individual
-from nsga2_gp.utils import adjust
+from nsga2_test.individual import Individual
+from nsga2_test.utils import adjust
 import random
 from example.data import table_p
 

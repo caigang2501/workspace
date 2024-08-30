@@ -26,7 +26,7 @@ def __get_delta():
 
 
 if __name__=='__main__':
-    plot_distribution(getrandom,800)
+    plot_distribution(random.randint,0,10)
 
 
 

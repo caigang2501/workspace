@@ -187,24 +187,25 @@ def tree2list(root):
 #=======================test=================================
 
 class Solution:
-    def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
-        self.max_d = 0
-        self.longest_path(root)
-        return self.max_d
-
-    def longest_path(self,node):
-        if not node.left and not node.right:
-            return 0
-        else:
-            left = self.longest_path(node.left)+1 if node.left else 0
-            right = self.longest_path(node.right)+1 if node.right else 0
-            self.max_d = max(self.max_d,left+right)
-            return max(left,right)
+    def connect(self, root):
+        start,curr = root,root
+        while curr.left:
+            curr.left.next = curr.right
+            abov = curr.right
+            if curr.next:
+                curr = curr.next
+                abov.next = curr.left
+            else:
+                curr = start.left
+                start = start.left
+        return root
 
 s = Solution()
-root = list2tree([1,2,3,4,5])
-result = s.diameterOfBinaryTree(root)
-print(result)
+root = list2tree([1,2,3,4,5,6,7])
+result = s.connect(root)
+while result:
+    print(result.val)
+    result = result.next
 # root = list2tree([3,3,None,4,2])
 
 # 1 2 3 4 5 6 7  bfs

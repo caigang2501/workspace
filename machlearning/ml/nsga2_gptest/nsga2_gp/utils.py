@@ -1,4 +1,4 @@
-from nsga2_gp.population import Population
+from nsga2_test.population import Population
 import random
 
 N_SH = 0.87

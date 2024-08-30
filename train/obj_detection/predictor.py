@@ -47,7 +47,7 @@ class Predictor(object):
     def display_boxes(self, img, predictions, score_thresh=0.8):
         boxes, scores = predictions['boxes'], predictions['scores']
         draw = ImageDraw.Draw(img)
-        font = ImageFont.truetype('data_cartoon/font.ttf', size=20)
+        font = ImageFont.truetype('data/traindata/objdetection/font.ttf', size=20)
         for i, cur_bbox in enumerate(boxes):
             if scores[i] < score_thresh:
                 continue

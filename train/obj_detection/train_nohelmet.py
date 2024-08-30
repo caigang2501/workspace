@@ -1,10 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-  @Author: zzn
-  @Date: 2019-11-05 12:21:26
-  @Last Modified by:   zzn
-  @Last Modified time: 2019-11-05 12:21:26
-"""
+
 import argparse
 import os
 
@@ -20,6 +15,8 @@ from model import fasterrcnn_resnet_fpn
 from transforms import get_transforms
 from utils import AverageMeter
 
+
+root = 'data/'
 
 def parse_args():
     def str2bool(v):
@@ -40,15 +37,15 @@ def parse_args():
     parser.add_argument('--weight_decay', type=float, default=0.0001)
     parser.add_argument('--momentum', type=float, default='0.9')
     parser.add_argument('--train_labeled_file', type=str,
-                        default='data_helmet/tr_label.csv')
+                        default=root+'helmet/annotations.csv')
     parser.add_argument('--val_labeled_file', type=str,
-                        default='data_helmet/val_label.csv')
-    parser.add_argument('--img_dir', type=str, default='data_helmet/nohelmet_imgs/')
+                        default=root+'helmet/val_label.csv')
+    parser.add_argument('--img_dir', type=str, default=root+'helmet/nohelmet_imgs/')
     parser.add_argument('--print_freq', type=int, default=20)
     parser.add_argument('--save_freq', type=int, default=1)
     parser.add_argument('--long_size', type=int, default=1024)
     parser.add_argument('--works', type=int, default=4)
-    parser.add_argument('--logs', type=str, default='data_helmet/checkpoints/logs.txt')
+    parser.add_argument('--logs', type=str, default=root+'models/checkpoints/logs.txt')
     parser.add_argument('--resume', type=str2bool, default='False')
     args = parser.parse_args()
     print(args)
@@ -136,7 +133,7 @@ if __name__ == '__main__':
     best_f1 = -100
     start_epoch = 0
     if args.resume:
-        checkpoints = torch.load('data_helmet/checkpoints/last_checkpoint.pt')
+        checkpoints = torch.load('data/checkpoints/last_checkpoint.pt')
         start_epoch = checkpoints['epoch']
         model.load_state_dict(checkpoints['weights'])
         optimizer.load_state_dict(checkpoints['optimizer'])
@@ -144,7 +141,7 @@ if __name__ == '__main__':
     for e in range(start_epoch+1, args.epochs+1):
         train_one_epoch(model, train_loader, optimizer, e, log_file)
         lr_scheduler.step()
-        val_f1 = validation(model, val_loader, e, log_file)
+        # val_f1 = validation(model, val_loader, e, log_file) # 测试集
         states = {
             'epoch': e,
             'weights': model.state_dict(),
@@ -152,11 +149,11 @@ if __name__ == '__main__':
             'lr_scheduler': lr_scheduler.state_dict()
         }
         torch.save(states,
-                   'data_helmet/checkpoints/last_checkpoint.pt')
+                   root+'models/checkpoints/last_checkpoint.pt')
         if val_f1 > best_f1:
             best_f1 = val_f1
             torch.save(model.state_dict(),
-                       'data_helmet/checkpoints/weights/best_model{}_{:.3f}.pt'.format(e, val_f1))
+                       root+'models/weights/best_model{}_{:.3f}.pt'.format(e, val_f1))
         # if e % args.save_freq == 0:
         #     torch.save(model.state_dict(),
         #                'data_helmet/checkpoints/weights/epoch_{}_f1_{:.5f}.pt'.format(e, val_f1))

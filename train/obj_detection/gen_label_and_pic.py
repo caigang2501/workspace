@@ -29,7 +29,10 @@ def parse_xml(xml_file):
 
     return False
 
-def parse_all_xml(xml_folder, output_csv):
+def parse_all_xml(root):
+    xml_folder = root + 'original_lables' # 修改为你的xml文件所在的文件夹路径
+    output_csv = root + 'annotations.csv' # 修改为你的输出CSV文件路径
+
     with open(output_csv, 'w', newline='') as csv_file:
         csv_writer = csv.writer(csv_file)
         csv_writer.writerow(['imgname', 'bboxes', 'width', 'height'])
@@ -39,16 +42,15 @@ def parse_all_xml(xml_folder, output_csv):
             xml_path = os.path.join(xml_folder, xml_file)
             annotation = parse_xml(xml_path)
             if annotation:
-                source_file = 'data_helmet/imgs/'+annotation[0]
+                source_file = root+'all_imgs/'+annotation[0]
                 annotation[0] = re.sub(r'(\D+)(\d+)(\D+)', rf'\g<1>{i}\g<3>', annotation[0])
-                destination_folder = 'data_helmet/nohelmet_imgs/'+annotation[0]
+                destination_folder = root+'nohelmet_imgs/'+annotation[0]
                 
                 shutil.copy(source_file,destination_folder)
                 csv_writer.writerow(annotation)
                 i += 1
 
 if __name__ == "__main__":
-    xml_folder = 'data_helmet/tag'  # 修改为你的xml文件所在的文件夹路径
-    output_csv = 'data_helmet/annotations.csv'  # 修改为你的输出CSV文件路径
-    parse_all_xml(xml_folder, output_csv)
+    root = 'data/traindata/objdetection/helmet/'  
+    parse_all_xml(root)
 

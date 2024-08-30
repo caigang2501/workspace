@@ -56,4 +56,7 @@ df = pd.DataFrame(data)
 df3 = df.groupby('Category').agg({'Value':'min','Value1':'count'})
 # df3 = df.groupby('Category')['Value'].transform('count')
 
-print(df3)
+for index, row in df.iterrows():
+    print(row.values)
+
+

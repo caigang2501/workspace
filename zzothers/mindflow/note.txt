@@ -1,7 +1,7 @@
 pip install packagename --no-deps
 
-tar -cvf danger_dtc_code.tar danger_detection
-scp danger_dtc_code.tar root@10.83.40.175:caigang/
+tar -cvf green_energy.tar green_energy
+scp danger_dtc_code.tar root@10.83.40.175:caigang/     root
 scp danger_dtc_code.tar user@10.83.190.141:caigang/   R8z@6cDY
 tar -xvf danger_dtc_code.tar 
 tar -xvzf filename.tgz
@@ -9,17 +9,19 @@ tar -xvzf filename.tgz
 rm -rf directoryname
 scp main.py root@10.83.40.175:caigang/danger_detection/main.py
 
+cd /gcph
+cd pythonData
+
+
+
+
+
+
+
 pip install markdown -i https://pypi.tuna.tsinghua.edu.cn/simple
 pip install markdown -i https://mirrors.aliyun.com/pypi/simple/
 pip install markdown -i http://mirrors.cloud.tencent.com/pypi/simple
 pip install markdown -i http://pypi.douban.com/simple/
-
-向量自回归模型（VAR模型）
-移动平均模型 （MA模型）
-自回归滑动平均模型（ARMA模型）
-差分自回归滑动平均模型（ARIMA模型）
-格兰杰因果关系（Granger Causality）
-
 
 linux:
 cat /etc/os-release

@@ -1,8 +1,8 @@
 import sys,os
 sys.path.append(os.getcwd())
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-from nsga2.problem import Problem
-from nsga2.evolution import Evolution
+from nsga2_test.problem import Problem
+from nsga2_test.evolution import Evolution
 import matplotlib.pyplot as plt
 
 

@@ -1,6 +1,4 @@
-from graph_ import mst_
 
+def main(data):
 
-def mst_edge(data):
-    edges = mst_(data)
-    return edges
+    return
