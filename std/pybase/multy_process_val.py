@@ -4,7 +4,6 @@ import time
 
 def worker_queue(num,works,result_queue):
     print(f'========================Worker {num} start working==========================')
-    """简单的工作函数，打印工作编号"""
     for i in range(works):
         time.sleep(0.1)
         if i>15:

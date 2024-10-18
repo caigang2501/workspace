@@ -3,14 +3,15 @@ import time
 import multiprocessing
 
 class myThread (threading.Thread):
-    def __init__(self, threadID, name, delay):
+    def __init__(self, threadID, name, delay,counter):
         threading.Thread.__init__(self)
         self.threadID = threadID
         self.name = name
         self.delay = delay
+        self.counter = counter
     def run(self):
         print ("开始线程：" + self.name)
-        print_time(self.name, self.delay, 5)
+        print_time(self.name, self.delay, self.counter)
         print ("退出线程：" + self.name)
 
 def print_time(threadName, delay, counter):
@@ -21,26 +22,19 @@ def print_time(threadName, delay, counter):
         print ("%s: %s" % (threadName, time.ctime(time.time())))
         counter -= 1
 
-# 创建新线程
-thread1 = myThread(1, "Thread-1", 1)
-thread2 = myThread(2, "Thread-2", 2)
+def testt():
+    thread1 = myThread(1, "Thread-1", 1,5)
+    thread2 = myThread(2, "Thread-2", 1,1)
 
-# 开启新线程
-thread1.start()
-thread2.start()
-# thread1.join()
-# thread2.join()
-print ("退出主线程")
+    thread1.start()
+    thread2.start()
+    thread1.join()
+    thread2.join()
+    print ("退出主线程")
 
-
-
-def worker(num):
-    for i in range(3):
-        print(f"Worker {num} is do {i}")
 
 if __name__ == "__main__":
-    with multiprocessing.Pool(processes=9) as pool:
-        results = pool.map(worker, range(9))
+    testt()
 
 
 

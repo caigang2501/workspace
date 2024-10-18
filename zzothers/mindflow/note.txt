@@ -9,8 +9,7 @@ tar -xvzf filename.tgz
 rm -rf directoryname
 scp main.py root@10.83.40.175:caigang/danger_detection/main.py
 
-cd /gcph
-cd pythonData
+cd /gcph/pythonData
 
 
 

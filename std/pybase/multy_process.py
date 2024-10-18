@@ -1,25 +1,22 @@
 import multiprocessing as mp
-import time
+import time,psutil
 
 
 def worker(num,works=20):
     print(f'========================Worker {num} start working==========================')
-    """简单的工作函数，打印工作编号"""
     for i in range(works):
-        time.sleep(0.1)
-        if i>15:
+        time.sleep(1)
+        if i>0:
             print(f'Worker {num} is working {i}')
     print(f'------------------------Worker {num} finished working-------------------------')
     return num
 
 def demo1():
-    # 创建进程池，指定进程数量为3
     with mp.Pool(processes=2) as pool:
-        # 使用apply_async方法异步地将任务提交给进程池中的工作进程执行
         result0 = pool.apply_async(worker, (0, 20))
         result1 = pool.apply_async(worker, (1, 20))
         result2 = pool.apply_async(worker, (2, 20))
-        # 获取每个工作进程的返回结果
+        
         results = [result0.get(),result1.get(),result2.get()]
 
     print(results)
@@ -60,9 +57,22 @@ def demo5():
         p0.join(),p1.join()
         print(mg_dic)
 
-if __name__=='__main__':
+pnames = {}
+def demotest(pname):
+    p = mp.Process(target=worker,args=(1,10,))
+    p.start()
+    pnames[pname] = p.pid
+    # p.join()
 
-    demo5() 
+def stop(pname):
+    p = psutil.Process(pnames[pname])
+    print(pnames)
+    p.terminate()
+
+if __name__=='__main__':
+    demotest('testp')
+    time.sleep(10)
+    stop('testp')
 
 
 
