@@ -22,7 +22,6 @@ FPS = 30
 screen = pygame.display.set_mode((WINDOW_SIZE, WINDOW_SIZE))
 pygame.display.set_caption("五子棋 - 人机对弈")
 
-# AI 模型
 class GomokuNet(nn.Module):
     def __init__(self):
         super(GomokuNet, self).__init__()
@@ -84,7 +83,6 @@ def check_direction(board, x, y, player, dx, dy):
             break
     return count == 5
 
-# AI 落子
 def ai_move(model, board):
     board_tensor = torch.tensor(board, dtype=torch.float32).unsqueeze(0).unsqueeze(0)
     with torch.no_grad():
@@ -97,7 +95,6 @@ def ai_move(model, board):
         else:
             prediction[x][y] = -float('inf')  # 如果已经被占，继续找下一个位置
 
-# 保存对局数据
 def save_game_data(game_data, game_id, folder="games_data"):
     os.makedirs(folder, exist_ok=True)
     file_path = os.path.join(folder, f"game_{game_id}.npy")
@@ -110,8 +107,6 @@ def save_game_data(game_data, game_id, folder="games_data"):
         print(f"保存文件时出错: {e}")
 
 
-
-# 人机对弈
 def play_game(model):
     board = np.zeros((BOARD_SIZE, BOARD_SIZE), dtype=np.int32)
     game_data = []
@@ -160,4 +155,6 @@ if __name__ == "__main__":
     # model.load_state_dict(torch.load("trained_model.pth"))  
     play_game(model)
     pygame.quit()
+
+
 

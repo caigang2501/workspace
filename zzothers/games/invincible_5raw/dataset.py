@@ -3,13 +3,14 @@ import torch.nn as nn
 import os,torch
 from torch.utils.data import Dataset, DataLoader
 from game import GomokuNet,BOARD_SIZE
+from utils import *
 
 class GomokuGameDataset(Dataset):
     def __init__(self, data_folder="games_data"):
         self.data = []
         for file in os.listdir(data_folder):
             file_path = os.path.join(data_folder, file)
-            game_data = np.load(file_path, allow_pickle=True)
+            game_data = read_txt()
             self.data.extend(game_data)
 
     def __len__(self):
@@ -20,7 +21,6 @@ class GomokuGameDataset(Dataset):
         board = torch.tensor(board, dtype=torch.float32).unsqueeze(0)
         return board, player
 
-# 训练函数
 def train_model(model, data_loader, epochs=5, lr=0.001):
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     criterion = nn.MSELoss()

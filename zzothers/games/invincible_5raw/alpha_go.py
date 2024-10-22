@@ -1,9 +1,6 @@
 import torch
-from torch import nn
-import numpy as np
-import torch.nn.functional as F
-from torch.utils.data import Dataset
-from constent import BOARD_SIZE,MODEL_PATH
+import torch.nn as nn
+import torch.optim as optim
 
 
 def board_to_tensor(board_state):
@@ -17,67 +14,12 @@ def test_board_to_tensor(board_state):
     batch_board = board_tensor.unsqueeze(0)  # 增加 batch 维度 (1, 3, 9, 9)
     print(batch_board.shape)
 
-class MLPClassifier(nn.Module):
-    def __init__(self, input_size, hidden_size, num_classes):
-        super(MLPClassifier, self).__init__()
-        self.fc1 = nn.Linear(input_size, hidden_size)
-        self.relu = nn.ReLU()
-        self.fc2 = nn.Linear(hidden_size, num_classes)
-
-    def forward(self, x):
-        x = x.view(x.size(0), -1)
-        x = self.fc1(x)
-        x = self.relu(x)
-        x = self.fc2(x)
-        return x
-    
-def test_MLPClassifier():
-    input_size = 5 * 5  
-    hidden_size = 128   
-    num_classes = 10    
-
-    model = MLPClassifier(input_size, hidden_size, num_classes)
-
-class GomokuNet(nn.Module):
-    def __init__(self):
-        super(GomokuNet, self).__init__()
-        self.conv1 = nn.Conv2d(3, 64, kernel_size=3, padding=1)
-        self.conv2 = nn.Conv2d(64, 128, kernel_size=3, padding=1)
-        self.conv3 = nn.Conv2d(128, 256, kernel_size=3, padding=1)
-        # self.conv4 = nn.Conv2d(256, 256, kernel_size=3, padding=1)
-        self.fc1 = nn.Linear(256 * BOARD_SIZE * BOARD_SIZE, 512)
-        self.fc2 = nn.Linear(512, BOARD_SIZE * BOARD_SIZE)
-
-    def forward(self, x):
-        x = F.relu(self.conv1(x))
-        x = F.relu(self.conv2(x))
-        x = F.relu(self.conv3(x))
-        x = x.view(-1, 256 * BOARD_SIZE * BOARD_SIZE)
-        x = F.relu(self.fc1(x))
-        x = self.fc2(x)
-        x = x.view(-1, BOARD_SIZE, BOARD_SIZE)
-        return x
-    
-
-class GomokuDataset(Dataset):
-    def __init__(self, size):
-        self.size = size
-        self.board_size = BOARD_SIZE
-
-    def __len__(self):
-        return self.size
-
-    def __getitem__(self, idx):
-        # 随机生成棋盘状态 (1, 15, 15) 和目标位置 (15, 15)
-        board = np.random.randint(0, 3, (1, self.board_size, self.board_size)).astype(np.float32)
-        label = np.random.randint(0, 2, (self.board_size, self.board_size)).astype(np.float32)
-        return board, label
-
 
 class SimplifiedAlphaGoNet(nn.Module):
-    def __init__(self, board_size=15):
+    def __init__(self, board_size=9):
         super(SimplifiedAlphaGoNet, self).__init__()
         self.board_size = board_size
+
         self.conv1 = nn.Conv2d(3, 64, kernel_size=3, padding=1)
         self.conv2 = nn.Conv2d(64, 128, kernel_size=3, padding=1)
         self.conv3 = nn.Conv2d(128, 256, kernel_size=3, padding=1)
@@ -95,13 +37,35 @@ class SimplifiedAlphaGoNet(nn.Module):
         x = self.relu(self.conv3(x))
         x = self.relu(self.conv4(x))
 
-        x = x.view(x.size(0), -1)
+        x = x.view(x.size(0), -1)  # (batch_size, 256 * board_size * board_size)
+        
+        print(x.shape)
         x = self.relu(self.fc1(x))
         x = self.fc2(x)
 
         x = self.softmax(x)
         return x.view(-1, self.board_size, self.board_size)
-    
+def train_stategy(model=None):
+    board_size = 15
+    if not model:
+        model = SimplifiedAlphaGoNet(board_size)
+
+    criterion = nn.CrossEntropyLoss()
+    optimizer = optim.Adam(model.parameters(), lr=0.001)
+
+    batch_size = 1
+    dummy_board = torch.randn(batch_size, 3, board_size, board_size)  # 假设输入棋盘状态
+    dummy_target = torch.randint(0, board_size * board_size, (batch_size,))  # 假设落子目标
+
+
+    outputs = model(dummy_board)
+    loss = criterion(outputs.view(batch_size, -1), dummy_target)
+    optimizer.zero_grad()
+    loss.backward()
+    optimizer.step()
+
+    print("Loss:", loss.item())
+
 
 class ValueNetwork(nn.Module):
     def __init__(self, board_size=15):
@@ -118,7 +82,7 @@ class ValueNetwork(nn.Module):
 
         # 激活函数
         self.relu = nn.ReLU()
-        self.tanh = nn.Sigmoid()
+        self.tanh = nn.Sigmoid()  
 
     def forward(self, x):
         # 输入是 (batch_size, 3, board_size, board_size)
@@ -139,11 +103,28 @@ class ValueNetwork(nn.Module):
 
         return x
 
-def init_stategy_model():
-    model = SimplifiedAlphaGoNet(BOARD_SIZE)
-    torch.save(model.state_dict(), MODEL_PATH+'stategy_15.pth')
+def train_value():
+    board_size = 15
+    value_net = ValueNetwork(board_size)
+    torch.save(value_net.state_dict(), 'models/value_15.pth')
 
-def init_value_model():
-    model = ValueNetwork(BOARD_SIZE)
-    torch.save(model.state_dict(), MODEL_PATH+'value_15.pth')
+    batch_size = 16
+    dummy_board = torch.randn(batch_size, 3, board_size, board_size)  # 假设输入棋盘状态
+    dummy_target_value = torch.rand(batch_size, 1) * 2 - 1
 
+    criterion = nn.MSELoss()  # 使用均方误差损失函数
+    optimizer = optim.Adam(value_net.parameters(), lr=0.001)
+
+    predicted_value = value_net(dummy_board)
+    loss = criterion(predicted_value, dummy_target_value)
+    optimizer.zero_grad()
+    loss.backward()
+    optimizer.step()
+
+    print("Loss:", loss.item())
+
+
+if __name__=='__main__':
+    # train_value()
+    train_stategy()
+    pass
