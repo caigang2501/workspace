@@ -67,7 +67,7 @@ def ai_move(model):
     return False
 
 def play_game(model):
-    player = 1  
+    player = -1  
     game_over = False
     
     while not game_over:
@@ -90,8 +90,8 @@ def play_game(model):
         else:
             game_over = ai_move(model)
             player = 1
-    
-    save_txt(steps)
+    print(len(steps))
+    save_steps(steps)
     pygame.quit()
     sys.exit()
 

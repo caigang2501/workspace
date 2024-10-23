@@ -4,6 +4,7 @@ import torch.optim as optim
 from torch.utils.data import DataLoader
 import numpy as np
 from model import *
+from dataset import *
 from constent import BOARD_SIZE
 
 
@@ -20,14 +21,13 @@ def train(model, data_loader, optimizer, criterion, epochs=10):
             loss.backward()
             optimizer.step()  
             
-            # 打印损失
             running_loss += loss.item()
-            if (i+1) % 10 == 0:  # 每10个 batch 打印一次损失
+            if (i+1) % 10 == 0:  
                 print(f'Epoch [{epoch+1}/{epochs}], Step [{i+1}/{len(data_loader)}], Loss: {running_loss/10:.4f}')
                 running_loss = 0.0
 
 def test_train(input_size, hidden_size, num_classes):
-    dataset = GomokuDataset(1000)  # 创建一个1000条数据的假数据集
+    dataset = GomokuGameDataset(1000)  
     data_loader = DataLoader(dataset, batch_size=32, shuffle=True)
     model = GomokuNet()
     optimizer = optim.Adam(model.parameters(), lr=0.001)
@@ -77,7 +77,7 @@ def train_value(model_path):
     try:
         model.load_state_dict(torch.load(model_path))
     except Exception as e:
-        init_stategy_model()
+        init_value_model()
 
     batch_size = 16
     dummy_board = torch.randn(batch_size, 3, board_size, board_size)  # 假设输入棋盘状态

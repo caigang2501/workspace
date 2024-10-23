@@ -38,41 +38,6 @@ def test_MLPClassifier():
 
     model = MLPClassifier(input_size, hidden_size, num_classes)
 
-class GomokuNet(nn.Module):
-    def __init__(self):
-        super(GomokuNet, self).__init__()
-        self.conv1 = nn.Conv2d(3, 64, kernel_size=3, padding=1)
-        self.conv2 = nn.Conv2d(64, 128, kernel_size=3, padding=1)
-        self.conv3 = nn.Conv2d(128, 256, kernel_size=3, padding=1)
-        # self.conv4 = nn.Conv2d(256, 256, kernel_size=3, padding=1)
-        self.fc1 = nn.Linear(256 * BOARD_SIZE * BOARD_SIZE, 512)
-        self.fc2 = nn.Linear(512, BOARD_SIZE * BOARD_SIZE)
-
-    def forward(self, x):
-        x = F.relu(self.conv1(x))
-        x = F.relu(self.conv2(x))
-        x = F.relu(self.conv3(x))
-        x = x.view(-1, 256 * BOARD_SIZE * BOARD_SIZE)
-        x = F.relu(self.fc1(x))
-        x = self.fc2(x)
-        x = x.view(-1, BOARD_SIZE, BOARD_SIZE)
-        return x
-    
-
-class GomokuDataset(Dataset):
-    def __init__(self, size):
-        self.size = size
-        self.board_size = BOARD_SIZE
-
-    def __len__(self):
-        return self.size
-
-    def __getitem__(self, idx):
-        # 随机生成棋盘状态 (1, 15, 15) 和目标位置 (15, 15)
-        board = np.random.randint(0, 3, (1, self.board_size, self.board_size)).astype(np.float32)
-        label = np.random.randint(0, 2, (self.board_size, self.board_size)).astype(np.float32)
-        return board, label
-
 
 class SimplifiedAlphaGoNet(nn.Module):
     def __init__(self, board_size=15):
