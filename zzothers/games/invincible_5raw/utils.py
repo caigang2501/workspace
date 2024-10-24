@@ -5,7 +5,7 @@ import torch
 
 def game_id():
     now = datetime.datetime.now()
-    return str(now.day)+str(now.hour)+str(now.minute)
+    return str(now.day)+str(now.hour)+str(now.minute)+str(now.second)
 
 def save_steps(game_data,folder="games_data"):
     os.makedirs(folder, exist_ok=True)

@@ -8,6 +8,8 @@ BOARD_HEIGHT = BOARD_SIZE * CELL_SIZE
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
+GREEN = (0, 255, 0)
 
 MODEL_PATH = 'models/'
-STEPS_PATH = 'games_data'
+STEPS_PATH = 'games_data/new_data'
+BATCH_SIZE = 10

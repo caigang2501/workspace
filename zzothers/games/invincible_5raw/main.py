@@ -4,6 +4,7 @@ from torch import nn
 from utils import *
 from model import *
 from constent import *
+from gameover_window import Button,quit_game
 
 
 pygame.init()
@@ -66,11 +67,31 @@ def ai_move(model):
         return True
     return False
 
+def game_over_screen():
+    continue_button = Button("continue", 300, 200, 200, 50, GREEN, (0, 200, 0), action=lambda: play_game(model))
+    quit_button = Button("exit", 300, 300, 200, 50, RED, (200, 0, 0), quit_game)
+
+    while True:
+        screen.fill(WHITE)
+        continue_button.draw(screen)
+        quit_button.draw(screen)
+        continue_button.check_click()
+        quit_button.check_click()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+        pygame.display.update()
+
+
 def play_game(model):
     player = 1  
     game_over = False
+    quit_game = False
+    global board
     
-    while not game_over:
+    while not quit_game:
         draw_board()
         draw_pieces()
         pygame.display.flip()
@@ -87,11 +108,23 @@ def play_game(model):
                             game_over = True
                             print(f"玩家 {player} 胜利！")
                     player = -1
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        quit_game = True
+                if event.type == pygame.QUIT:  
+                    quit_game = True
         else:
             game_over = ai_move(model)
             player = 1
-    print(len(steps))
-    save_steps(steps)
+            
+        if game_over:
+            save_steps(steps,folder=STEPS_PATH)
+            board = board*0
+            game_over = False
+            player = 1
+
+    # save_steps(steps,folder=STEPS_PATH)
+    # game_over_screen()
     pygame.quit()
     sys.exit()
 
