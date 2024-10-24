@@ -2,28 +2,34 @@ import numpy as np
 import torch.nn as nn
 import os,torch
 from torch.utils.data import Dataset, DataLoader
-from game import GomokuNet,BOARD_SIZE
+from constent import BOARD_SIZE
 from utils import *
-
 class StrategyDataset(Dataset):
-    def __init__(self,value_model,steps=None):
+    def __init__(self,steps=None,value_model=None):
         self.data = steps
         self.board = np.zeros((BOARD_SIZE, BOARD_SIZE))
         self.winned = True if len(self.data)%2==1 else False # 奇数先手赢 偶数后手赢 
         self.value_model = value_model
 
     def __len__(self):
-        return len(self.data)
+        return len(self.data)//2
 
     def __getitem__(self, idx):
-        if idx%2==0: 
+        idx *= 2
+
+        if self.winned:
+            target = self.data[idx][0]*BOARD_SIZE+self.data[idx][1]
+            board = torch.tensor(self.board, dtype=torch.float32)
             self.board[*self.data[idx]] = 1
-            target = 1 if self.winned else 0
         else:
-            self.board[*self.data[idx]] = -1
-            target = 0 if self.winned else 1
-        board = torch.tensor(self.board, dtype=torch.float32).unsqueeze(0)
-        return board, target
+            self.board[*self.data[idx]] = 1
+            target = self.data[idx+1][0]*BOARD_SIZE+self.data[idx+1][1]
+            board = -torch.tensor(self.board, dtype=torch.float32)
+
+        board = oneto3_channel(board)
+        self.board[*self.data[idx+1]] = -1
+
+        return board,torch.tensor(target, dtype=torch.long)
     
 class ValueDataset(Dataset):
     def __init__(self,steps=None):
@@ -37,14 +43,16 @@ class ValueDataset(Dataset):
     def __getitem__(self, idx):
         if idx%2==0:
             self.board[*self.data[idx]] = 1
-            target = 1 if self.winned else 0
-            board = torch.tensor(self.board, dtype=torch.float32).unsqueeze(0)
+            board = torch.tensor(self.board, dtype=torch.float32)
+            board = oneto3_channel(board)
+            target = np.array([1 if self.winned else 0])
         else:
             self.board[*self.data[idx]] = -1
-            target = 0 if self.winned else 1
-            board = -torch.tensor(self.board, dtype=torch.float32).unsqueeze(0)
-        return board, target
-
+            board = -torch.tensor(self.board, dtype=torch.float32)
+            board = oneto3_channel(board)
+            target = np.array([0 if self.winned else 1])
+        return board, torch.tensor(target,dtype=torch.float32)
+        
 def train_model(model, data_loader, epochs=5, lr=0.001):
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     criterion = nn.MSELoss()
@@ -64,8 +72,12 @@ def train_model(model, data_loader, epochs=5, lr=0.001):
         print(f"Epoch {epoch+1}/{epochs}, Loss: {loss.item():.4f}")
 
 if __name__ == "__main__":
-    dataset = GomokuGameDataset()
-    data_loader = DataLoader(dataset, batch_size=32, shuffle=True)
+    steps = load_latext_steps()
+    dataset = StrategyDataset(steps)
+    # dataset = ValueDataset(steps)
+    data_loader = DataLoader(dataset, batch_size=16, shuffle=True)
+    for board,labels in data_loader:
+        print(board.shape,labels.shape,labels)
+        print(board[0,0,0,0],labels[0])
     
-    model = GomokuNet()
-    train_model(model, data_loader)
+

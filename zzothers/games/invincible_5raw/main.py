@@ -51,7 +51,7 @@ def ai_move(model):
     # unsqueeze:加维度  squeeze:删维度
     board_tensor = board_to_tensor(board).unsqueeze(0)
     with torch.no_grad():
-        prediction = model(board_tensor).squeeze(0)
+        prediction = model(board_tensor).squeeze(0)     # torch.Size([15, 15])
     while True:
         max_idx = torch.argmax(prediction).item()
         x, y = divmod(max_idx, BOARD_SIZE)
@@ -67,7 +67,7 @@ def ai_move(model):
     return False
 
 def play_game(model):
-    player = -1  
+    player = 1  
     game_over = False
     
     while not game_over:

@@ -52,7 +52,7 @@ class SimplifiedAlphaGoNet(nn.Module):
         self.fc2 = nn.Linear(512, board_size * board_size)
 
         self.relu = nn.ReLU()
-        self.softmax = nn.Softmax(dim=1)
+        self.softmax = nn.Softmax(dim=1) # 使输出的所有元素加起来为1
 
     def forward(self, x):
         x = self.relu(self.conv1(x))
@@ -63,11 +63,9 @@ class SimplifiedAlphaGoNet(nn.Module):
         x = x.view(x.size(0), -1)
         x = self.relu(self.fc1(x))
         x = self.fc2(x)
-
         x = self.softmax(x)
-        return x.view(-1, self.board_size, self.board_size)
+        return x.view(-1, self.board_size, self.board_size)     # torch.Size([1, 15, 15])
     
-
 class ValueNetwork(nn.Module):
     def __init__(self, board_size=15):
         super(ValueNetwork, self).__init__()
