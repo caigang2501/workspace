@@ -48,14 +48,17 @@ def check_win(player):
     return False
 
 
-def ai_move(model):
+def ai_move():
     # unsqueeze:加维度  squeeze:删维度
     board_tensor = board_to_tensor(board).unsqueeze(0)
     with torch.no_grad():
-        prediction = model(board_tensor).squeeze(0)     # torch.Size([15, 15])
+        prediction = strategy_model(board_tensor).squeeze(0)     # torch.Size([15, 15])
     while True:
-        max_idx = torch.argmax(prediction).item()
-        x, y = divmod(max_idx, BOARD_SIZE)
+        max_idx_ = torch.argmax(prediction).item()
+        topk_values, topk_indices = torch.topk(prediction, k=3)
+        max_idx = topk_indices[0]
+        print(type(max_idx_),prediction.shape,topk_indices.shape,max_idx.shape)
+        x, y = divmod(max_idx_, BOARD_SIZE)
         if board[x,y] == 0:
             board[x,y] = -1
             break
@@ -68,7 +71,7 @@ def ai_move(model):
     return False
 
 def game_over_screen():
-    continue_button = Button("continue", 300, 200, 200, 50, GREEN, (0, 200, 0), action=lambda: play_game(model))
+    continue_button = Button("continue", 300, 200, 200, 50, GREEN, (0, 200, 0), action=lambda: play_game())
     quit_button = Button("exit", 300, 300, 200, 50, RED, (200, 0, 0), quit_game)
 
     while True:
@@ -85,8 +88,9 @@ def game_over_screen():
         pygame.display.update()
 
 
-def play_game(model):
-    player = 1  
+def play_game(player1,player2):
+    first = 1
+    player = first  
     game_over = False
     quit_game = False
     global board
@@ -114,22 +118,22 @@ def play_game(model):
                 if event.type == pygame.QUIT:  
                     quit_game = True
         else:
-            game_over = ai_move(model)
+            game_over = ai_move()
             player = 1
             
         if game_over:
             save_steps(steps,folder=STEPS_PATH)
             board = board*0
             game_over = False
-            player = 1
+            player = first
 
-    # save_steps(steps,folder=STEPS_PATH)
-    # game_over_screen()
     pygame.quit()
     sys.exit()
 
 
 if __name__ == "__main__":
-    model = SimplifiedAlphaGoNet(15)
-    # model.load_state_dict(torch.load("trained_model.pth"))  
-    play_game(model)
+    strategy_model = SimplifiedAlphaGoNet(15)
+    value_model = ValueNetwork(15)
+    strategy_model.load_state_dict(torch.load(MODEL_PATH+STRATEGY_MODEL_NAME))
+    value_model.load_state_dict(torch.load(MODEL_PATH+VALUE_MODEL_NAME))
+    play_game(player1=PERSON,player2=MACHINE)

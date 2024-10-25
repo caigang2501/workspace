@@ -8,37 +8,6 @@ from dataset import *
 from constent import BOARD_SIZE,STEPS_PATH,BATCH_SIZE
 from tqdm import tqdm
 
-def train(model, data_loader, optimizer, criterion, epochs=10):
-    model.train()
-    for epoch in range(epochs):
-        running_loss = 0.0
-        for i, (boards, labels) in enumerate(data_loader):
-            boards, labels = torch.tensor(boards), torch.tensor(labels)
-            
-            outputs = model(boards)
-            loss = criterion(outputs, labels)
-            loss.backward()
-            optimizer.step()  
-            
-            running_loss += loss.item()
-            if (i+1) % 10 == 0:  
-                print(f'Epoch [{epoch+1}/{epochs}], Step [{i+1}/{len(data_loader)}], Loss: {running_loss/10:.4f}')
-                running_loss = 0.0
-
-def test_train(input_size, hidden_size, num_classes):
-    dataset = StrategyDataset(1000)  
-    data_loader = DataLoader(dataset, batch_size=BATCH_SIZE, shuffle=True)
-    model = ValueDataset()
-    optimizer = optim.Adam(model.parameters(), lr=0.001)
-    criterion = nn.MSELoss()
-    # criterion = nn.CrossEntropyLoss()
-    train(model, data_loader, optimizer, criterion, epochs=10)
-
-
-    torch.save(model.state_dict(), 'model.pth')
-    model = MLPClassifier(input_size, hidden_size, num_classes)
-    model.load_state_dict(torch.load('model.pth'))
-
 
 def train_strategy(model_path,epochs):
     model = SimplifiedAlphaGoNet(BOARD_SIZE)

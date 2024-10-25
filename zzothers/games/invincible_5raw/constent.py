@@ -10,6 +10,10 @@ BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 
+PERSON = 'person'
+MACHINE = 'machine'
 MODEL_PATH = 'models/'
+STRATEGY_MODEL_NAME = 'strategy_15.pth'
+VALUE_MODEL_NAME = 'value_15.pth'
 STEPS_PATH = 'games_data/new_data'
 BATCH_SIZE = 10

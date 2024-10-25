@@ -3,7 +3,7 @@ from torch import nn
 import numpy as np
 import torch.nn.functional as F
 from torch.utils.data import Dataset
-from constent import BOARD_SIZE,MODEL_PATH
+from constent import BOARD_SIZE,MODEL_PATH,STRATEGY_MODEL_NAME,VALUE_MODEL_NAME
 
 
 def board_to_tensor(board_state):
@@ -104,9 +104,9 @@ class ValueNetwork(nn.Module):
 
 def init_stategy_model():
     model = SimplifiedAlphaGoNet(BOARD_SIZE)
-    torch.save(model.state_dict(), MODEL_PATH+'stategy_15.pth')
+    torch.save(model.state_dict(), MODEL_PATH+STRATEGY_MODEL_NAME)
 
 def init_value_model():
     model = ValueNetwork(BOARD_SIZE)
-    torch.save(model.state_dict(), MODEL_PATH+'value_15.pth')
+    torch.save(model.state_dict(), MODEL_PATH+VALUE_MODEL_NAME)
 

@@ -12,7 +12,7 @@ class StrategyDataset(Dataset):
         self.value_model = value_model
 
     def __len__(self):
-        return len(self.data)//2
+        return (len(self.data)+1)//2
 
     def __getitem__(self, idx):
         idx *= 2
@@ -27,7 +27,8 @@ class StrategyDataset(Dataset):
             board = -torch.tensor(self.board, dtype=torch.float32)
 
         board = oneto3_channel(board)
-        self.board[*self.data[idx+1]] = -1
+        if idx+1<len(self.data):
+            self.board[*self.data[idx+1]] = -1
 
         return board,torch.tensor(target, dtype=torch.long)
     
@@ -72,12 +73,13 @@ def train_model(model, data_loader, epochs=5, lr=0.001):
         print(f"Epoch {epoch+1}/{epochs}, Loss: {loss.item():.4f}")
 
 if __name__ == "__main__":
-    steps = load_latext_steps()
+    steps = load_latest_steps()
+    # print(steps[::2])
     dataset = StrategyDataset(steps)
     # dataset = ValueDataset(steps)
-    data_loader = DataLoader(dataset, batch_size=16, shuffle=True)
+    data_loader = DataLoader(dataset, batch_size=16, shuffle=False)
     for board,labels in data_loader:
         print(board.shape,labels.shape,labels)
-        print(board[0,0,0,0],labels[0])
+        print(board[4,1],labels[4])
     
 
