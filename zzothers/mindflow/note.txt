@@ -17,10 +17,7 @@ cd /gcph/pythonData
 
 
 
-pip install markdown -i https://pypi.tuna.tsinghua.edu.cn/simple
-pip install markdown -i https://mirrors.aliyun.com/pypi/simple/
-pip install markdown -i http://mirrors.cloud.tencent.com/pypi/simple
-pip install markdown -i http://pypi.douban.com/simple/
+justMyCode:false
 
 linux:
 cat /etc/os-release

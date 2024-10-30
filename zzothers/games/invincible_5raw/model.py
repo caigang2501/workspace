@@ -64,7 +64,7 @@ class SimplifiedAlphaGoNet(nn.Module):
         x = self.relu(self.fc1(x))
         x = self.fc2(x)
         x = self.softmax(x)
-        return x.view(-1, self.board_size, self.board_size)     # torch.Size([1, 15, 15])
+        return x.view(-1, self.board_size, self.board_size)     # torch.Size([1, 15, 15]), the first dimension is batch size
     
 class ValueNetwork(nn.Module):
     def __init__(self, board_size=15):

@@ -30,6 +30,21 @@ class Button:
                 if self.action:
                     self.action()
 
+# def game_over_screen():
+#     continue_button = Button("continue", 300, 200, 200, 50, GREEN, (0, 200, 0), action=lambda: play_game())
+#     quit_button = Button("exit", 300, 300, 200, 50, RED, (200, 0, 0), quit_game)
+
+#     while True:
+#         screen.fill(WHITE)
+#         continue_button.draw(screen)
+#         quit_button.draw(screen)
+#         continue_button.check_click()
+#         quit_button.check_click()
+#         for event in pygame.event.get():
+#             if event.type == pygame.QUIT:
+#                 pygame.quit()
+#                 sys.exit()
+#         pygame.display.update()
 
 def quit_game():
     pygame.quit()

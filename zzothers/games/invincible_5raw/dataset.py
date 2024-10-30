@@ -4,6 +4,14 @@ import os,torch
 from torch.utils.data import Dataset, DataLoader
 from constent import BOARD_SIZE
 from utils import *
+
+def random_data(batch_size=32, board_size=15):
+    board_state = torch.randint(0, 2, (batch_size, 3, board_size, board_size)).float()
+    target_label = torch.randint(0, board_size * board_size, (batch_size,))
+    
+    return board_state, target_label
+
+
 class StrategyDataset(Dataset):
     def __init__(self,steps=None,value_model=None):
         self.data = steps
@@ -52,6 +60,7 @@ class ValueDataset(Dataset):
             board = -torch.tensor(self.board, dtype=torch.float32)
             board = oneto3_channel(board)
             target = np.array([0 if self.winned else 1])
+        # target = np.array([1])
         return board, torch.tensor(target,dtype=torch.float32)
         
 def train_model(model, data_loader, epochs=5, lr=0.001):
@@ -71,6 +80,9 @@ def train_model(model, data_loader, epochs=5, lr=0.001):
             optimizer.step()
 
         print(f"Epoch {epoch+1}/{epochs}, Loss: {loss.item():.4f}")
+
+
+
 
 if __name__ == "__main__":
     steps = load_latest_steps()

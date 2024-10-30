@@ -1,10 +1,9 @@
-import sys,pygame,torch
+import sys,pygame,torch,time
 import numpy as np
 from torch import nn
 from utils import *
 from model import *
 from constent import *
-from gameover_window import Button,quit_game
 
 
 pygame.init()
@@ -48,81 +47,77 @@ def check_win(player):
     return False
 
 
-def ai_move():
+def ai_move(player):
+    # time.sleep(1)
     # unsqueeze:加维度  squeeze:删维度
     board_tensor = board_to_tensor(board).unsqueeze(0)
     with torch.no_grad():
         prediction = strategy_model(board_tensor).squeeze(0)     # torch.Size([15, 15])
+        print(prediction)
     while True:
         max_idx_ = torch.argmax(prediction).item()
         topk_values, topk_indices = torch.topk(prediction, k=3)
         max_idx = topk_indices[0]
-        print(type(max_idx_),prediction.shape,topk_indices.shape,max_idx.shape)
+        # print(type(max_idx_),prediction.shape,topk_indices.shape,max_idx.shape)
         x, y = divmod(max_idx_, BOARD_SIZE)
         if board[x,y] == 0:
-            board[x,y] = -1
+            board[x,y] = player
             break
         else:
             prediction[x][y] = -float('inf')
-    board[x,y] = -1
+    board[x,y] = player
     steps.append([x,y])
-    if check_win(-1):
+    if check_win(player):
         return True
-    return False
-
-def game_over_screen():
-    continue_button = Button("continue", 300, 200, 200, 50, GREEN, (0, 200, 0), action=lambda: play_game())
-    quit_button = Button("exit", 300, 300, 200, 50, RED, (200, 0, 0), quit_game)
-
-    while True:
-        screen.fill(WHITE)
-        continue_button.draw(screen)
-        quit_button.draw(screen)
-        continue_button.check_click()
-        quit_button.check_click()
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-
-        pygame.display.update()
+    return False,-player
 
 
 def play_game(player1,player2):
+
+    def player_move(game_over,quit_game,player):
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                x, y = pygame.mouse.get_pos()
+                col = x // CELL_SIZE
+                row = y // CELL_SIZE
+                steps.append([row,col])
+                if board[row, col] == 0:
+                    board[row, col] = player
+                    if check_win(player):
+                        game_over = True
+                        print(f"玩家 {player} 胜利！")
+                player = -player
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    quit_game = True
+            if event.type == pygame.QUIT:  
+                quit_game = True        
+        return game_over,quit_game,player
+    
     first = 1
     player = first  
     game_over = False
     quit_game = False
     global board
-    
+
     while not quit_game:
         draw_board()
         draw_pieces()
         pygame.display.flip()
         if player==1:
-            for event in pygame.event.get():
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    x, y = pygame.mouse.get_pos()
-                    col = x // CELL_SIZE
-                    row = y // CELL_SIZE
-                    steps.append([row,col])
-                    if board[row, col] == 0:
-                        board[row, col] = player
-                        if check_win(player):
-                            game_over = True
-                            print(f"玩家 {player} 胜利！")
-                    player = -1
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        quit_game = True
-                if event.type == pygame.QUIT:  
-                    quit_game = True
+            if player1==PERSON:
+                game_over,quit_game,player = player_move(game_over,quit_game,player)
+            else:
+                game_over,player = ai_move(player)
         else:
-            game_over = ai_move()
-            player = 1
+            if player2==PERSON:
+                game_over,quit_game,player = player_move(game_over,quit_game,player)
+            else:
+                game_over,player = ai_move(player)
             
         if game_over:
-            save_steps(steps,folder=STEPS_PATH)
+            if SAVE_BOARD:
+                save_steps(steps,folder=STEPS_PATH)
             board = board*0
             game_over = False
             player = first
