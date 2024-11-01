@@ -9,9 +9,8 @@ VALUE_MODEL_NAME = 'value_15.pth'
 STEPS_PATH = 'games_data/new_data'
 
 EPOCHS = 10
-BATCH_SIZE = 1
-BRANCH_COUND = 5 # branch count of strategy model
-
+BATCH_SIZE = 32
+BRANCH_COUND = 7 # branch count of strategy model
 
 
 

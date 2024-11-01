@@ -47,33 +47,34 @@ def check_win(player):
     return False
 
 
-def ai_move(player):
-    # time.sleep(1)
-    # unsqueeze:加维度  squeeze:删维度
-    board_tensor = board_to_tensor(board).unsqueeze(0)
-    with torch.no_grad():
-        prediction = strategy_model(board_tensor).squeeze(0)     # torch.Size([15, 15])
-        print(prediction)
-    while True:
-        max_idx_ = torch.argmax(prediction).item()
-        topk_values, topk_indices = torch.topk(prediction, k=3)
-        max_idx = topk_indices[0]
-        # print(type(max_idx_),prediction.shape,topk_indices.shape,max_idx.shape)
-        x, y = divmod(max_idx_, BOARD_SIZE)
-        if board[x,y] == 0:
-            board[x,y] = player
-            break
-        else:
-            prediction[x][y] = -float('inf')
-    board[x,y] = player
-    steps.append([x,y])
-    if check_win(player):
-        return True
-    return False,-player
-
-
 def play_game(player1,player2):
-
+    def generate_value():
+        pass
+    def ai_move(player):
+        # time.sleep(1)
+        # unsqueeze:加维度  squeeze:降维度
+        board_tensor = board_to_tensor(board).unsqueeze(0)
+        with torch.no_grad():
+            prediction = strategy_model(board_tensor).squeeze(0)     # torch.Size([15, 15])
+            print(prediction)
+        while True:
+            max_idx_ = torch.argmax(prediction).item()
+            topk_values, topk_indices = torch.topk(prediction.view(-1), k=BRANCH_COUND)
+            # TODO topk_indices = [generate_value(x) for x in topk_indices]
+            # print(type(max_idx_),prediction.shape,topk_indices.shape,max_idx.shape)
+            x, y = divmod(max_idx_, BOARD_SIZE)
+            if board[x,y] == 0:
+                board[x,y] = player
+                break
+            else:
+                prediction[x][y] = -float('inf')
+        board[x,y] = player
+        steps.append([x,y])
+        if check_win(player):
+            print('AI胜利')
+            return True,-player
+        return False,-player
+    
     def player_move(game_over,quit_game,player):
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -127,8 +128,8 @@ def play_game(player1,player2):
 
 
 if __name__ == "__main__":
-    strategy_model = SimplifiedAlphaGoNet(15)
-    value_model = ValueNetwork(15)
+    strategy_model = StrategyResnet18(15).eval()
+    value_model = ValueEfficientnetB0().eval()
     strategy_model.load_state_dict(torch.load(MODEL_PATH+STRATEGY_MODEL_NAME))
     value_model.load_state_dict(torch.load(MODEL_PATH+VALUE_MODEL_NAME))
     play_game(player1=PERSON,player2=MACHINE)

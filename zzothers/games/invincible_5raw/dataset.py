@@ -5,8 +5,9 @@ from torch.utils.data import Dataset, DataLoader
 from constent import BOARD_SIZE
 from utils import *
 
+
 def random_data(batch_size=32, board_size=15):
-    board_state = torch.randint(0, 2, (batch_size, 3, board_size, board_size)).float()
+    board_state = torch.randint(0, 3, (batch_size, 3, board_size, board_size)).float()
     target_label = torch.randint(0, board_size * board_size, (batch_size,))
     
     return board_state, target_label
@@ -62,36 +63,61 @@ class ValueDataset(Dataset):
             target = np.array([0 if self.winned else 1])
         # target = np.array([1])
         return board, torch.tensor(target,dtype=torch.float32)
-        
-def train_model(model, data_loader, epochs=5, lr=0.001):
-    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
-    criterion = nn.MSELoss()
 
-    for epoch in range(epochs):
-        for boards, players in data_loader:
-            boards = boards.float()
-            players = players.float()
+def strategy_dataset(path):
+    dataset = []
+    labels = []
+    for file in os.listdir(path):
+        steps_path = os.path.join(path, file)
+        steps = np.load(steps_path, allow_pickle=True)
+        board = np.zeros((BOARD_SIZE, BOARD_SIZE))
+        winned = True if len(steps)%2==1 else False
+        for idx in range((len(steps)+1)//2):
+            idx *= 2
+            if winned:
+                target = steps[idx][0]*BOARD_SIZE+steps[idx][1]
+                board_state = torch.tensor(board, dtype=torch.float32)
+                board[*steps[idx]] = 1
+            else:
+                board[*steps[idx]] = 1
+                target = steps[idx+1][0]*BOARD_SIZE+steps[idx+1][1]
+                board_state = -torch.tensor(board, dtype=torch.float32)
 
-            # 预测
-            predictions = model(boards).view(-1, BOARD_SIZE * BOARD_SIZE)
-            loss = criterion(predictions, players)
-            optimizer.zero_grad()
-            loss.backward()
-            optimizer.step()
+            board_state = oneto3_channel(board_state)
+            if idx+1<len(steps):
+                board[*steps[idx+1]] = -1
+            dataset.append(board_state)
+            labels.append(torch.tensor(target, dtype=torch.long))
+    return torch.stack(dataset),torch.stack(labels)
 
-        print(f"Epoch {epoch+1}/{epochs}, Loss: {loss.item():.4f}")
-
+def value_dataset(path):
+    dataset = []
+    labels = []
+    for file in os.listdir(path):
+        steps_path = os.path.join(path, file)
+        steps = np.load(steps_path, allow_pickle=True)
+        board = np.zeros((BOARD_SIZE, BOARD_SIZE))
+        winned = True if len(steps)%2==1 else False
+        for idx in range(len(steps)):
+            if idx%2==0:
+                board[*steps[idx]] = 1
+                board_state = torch.tensor(board, dtype=torch.float32)
+                board_state = oneto3_channel(board_state)
+                target = np.array([1 if winned else 0])
+            else:
+                board[*steps[idx]] = -1
+                board_state = -torch.tensor(board, dtype=torch.float32)
+                board_state = oneto3_channel(board_state)
+                target = np.array([0 if winned else 1])
+            target = np.array([1])
+            dataset.append(board_state)
+            labels.append(torch.tensor(target, dtype=torch.float32))
+    return torch.stack(dataset),torch.stack(labels)
 
 
 
 if __name__ == "__main__":
-    steps = load_latest_steps()
-    # print(steps[::2])
-    dataset = StrategyDataset(steps)
-    # dataset = ValueDataset(steps)
-    data_loader = DataLoader(dataset, batch_size=16, shuffle=False)
-    for board,labels in data_loader:
-        print(board.shape,labels.shape,labels)
-        print(board[4,1],labels[4])
+    dataset,labels = value_dataset(STEPS_PATH)
+    print(dataset.shape,labels.shape)
     
 

@@ -1,8 +1,11 @@
 import torch
 from torch import nn
+from torchvision.models import resnet18,mobilenet_v2,efficientnet_b0
 import numpy as np
 import torch.nn.functional as F
 from torch.utils.data import Dataset
+
+from dataset import *
 from constent import BOARD_SIZE,MODEL_PATH,STRATEGY_MODEL_NAME,VALUE_MODEL_NAME
 
 
@@ -39,9 +42,9 @@ def test_MLPClassifier():
     model = MLPClassifier(input_size, hidden_size, num_classes)
 
 
-class SimplifiedAlphaGoNet(nn.Module):
+class CustomStrategyNet(nn.Module):
     def __init__(self, board_size=15):
-        super(SimplifiedAlphaGoNet, self).__init__()
+        super(CustomStrategyNet, self).__init__()
         self.board_size = board_size
         self.conv1 = nn.Conv2d(3, 64, kernel_size=3, padding=1)
         self.conv2 = nn.Conv2d(64, 128, kernel_size=3, padding=1)
@@ -65,10 +68,10 @@ class SimplifiedAlphaGoNet(nn.Module):
         x = self.fc2(x)
         x = self.softmax(x)
         return x.view(-1, self.board_size, self.board_size)     # torch.Size([1, 15, 15]), the first dimension is batch size
-    
-class ValueNetwork(nn.Module):
+
+class CustomValueNet(nn.Module):
     def __init__(self, board_size=15):
-        super(ValueNetwork, self).__init__()
+        super(CustomValueNet, self).__init__()
         self.board_size = board_size
 
         self.conv1 = nn.Conv2d(3, 64, kernel_size=3, padding=1)
@@ -77,36 +80,89 @@ class ValueNetwork(nn.Module):
         self.conv4 = nn.Conv2d(256, 256, kernel_size=3, padding=1)
 
         self.fc1 = nn.Linear(256 * board_size * board_size, 512)
-        self.fc2 = nn.Linear(512, 1)  # 输出一个值，表示当前局面获胜的概率
+        self.fc2 = nn.Linear(512, 1)
 
-        # 激活函数
         self.relu = nn.ReLU()
-        self.tanh = nn.Sigmoid()
+        self.sigmoid = nn.Sigmoid()
 
     def forward(self, x):
-        # 输入是 (batch_size, 3, board_size, board_size)
+        # input: (batch_size, 3, board_size, board_size)
         x = self.relu(self.conv1(x))
         x = self.relu(self.conv2(x))
         x = self.relu(self.conv3(x))
         x = self.relu(self.conv4(x))
 
-        # 展平
         x = x.view(x.size(0), -1)  # (batch_size, 256 * board_size * board_size)
 
-        # 全连接层
         x = self.relu(self.fc1(x))
         x = self.fc2(x)
 
-        # 使用 tanh 激活函数，将输出限制在 [-1, 1] 范围
-        x = self.tanh(x)
+        x = self.sigmoid(x)
 
         return x
 
+class StrategyResnet18(nn.Module):
+    def __init__(self, board_size=15):
+        super(StrategyResnet18, self).__init__()
+        self.board_size = board_size
+        self.resnet = resnet18(pretrained=False)
+        self.resnet.conv1 = nn.Conv2d(3, 64, kernel_size=3, padding=1)
+        self.resnet.fc = nn.Linear(self.resnet.fc.in_features, board_size * board_size)
+
+    def forward(self, x):
+        x = self.resnet(x)
+        return x.view(-1, self.board_size, self.board_size)
+    
+class StrategyMobilenetV2(nn.Module):
+    def __init__(self, board_size=15):
+        super(StrategyMobilenetV2, self).__init__()
+        self.board_size = board_size
+        self.mobilenet = mobilenet_v2(pretrained=False)
+        self.mobilenet.features[0][0] = nn.Conv2d(3, 32, kernel_size=3, stride=1, padding=1)
+        self.mobilenet.classifier = nn.Linear(self.mobilenet.last_channel, board_size * board_size)
+
+    def forward(self, x):
+        x = self.mobilenet(x)
+        return x.view(-1, self.board_size, self.board_size)
+
+
+class ValueResnet18(nn.Module):
+    def __init__(self, board_size=15):
+        super(ValueResnet18, self).__init__()
+        self.board_size = board_size
+        self.resnet = resnet18(pretrained=False)
+        self.resnet.conv1 = nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1)
+        self.resnet.fc = nn.Linear(self.resnet.fc.in_features, 1)
+
+    def forward(self, x):
+        return self.resnet(x)
+
+
+class ValueEfficientnetB0(nn.Module):
+    def __init__(self):
+        super(ValueEfficientnetB0, self).__init__()
+        self.efficientnet = efficientnet_b0(pretrained=False)
+        self.efficientnet.features[0][0] = nn.Conv2d(3, 32, kernel_size=3, stride=1, padding=1)
+        self.efficientnet.classifier = nn.Linear(self.efficientnet.classifier[-1].in_features, 1)
+
+    def forward(self, x):
+        return self.efficientnet(x)
+
+
 def init_stategy_model():
-    model = SimplifiedAlphaGoNet(BOARD_SIZE)
+    model = StrategyResnet18(BOARD_SIZE)
     torch.save(model.state_dict(), MODEL_PATH+STRATEGY_MODEL_NAME)
 
 def init_value_model():
-    model = ValueNetwork(BOARD_SIZE)
+    model = ValueEfficientnetB0()
     torch.save(model.state_dict(), MODEL_PATH+VALUE_MODEL_NAME)
 
+if __name__=='__main__':
+    current_board_state = torch.randint(0, 3, (3, 15, 15)).float()  # 0, 1, 2 表示不同的棋子
+    current_board_state = current_board_state.unsqueeze(0)
+    model = ValueResnet18(BOARD_SIZE)
+    model.eval()
+    print(current_board_state.shape)
+    output = model(current_board_state)
+    print(output)
+    # init_value_model()
