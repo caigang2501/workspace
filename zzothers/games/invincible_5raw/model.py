@@ -6,7 +6,7 @@ import torch.nn.functional as F
 from torch.utils.data import Dataset
 
 from dataset import *
-from constent import BOARD_SIZE,MODEL_PATH,STRATEGY_MODEL_NAME,VALUE_MODEL_NAME
+from constent import BOARD_SIZE,STRATEGY_MODEL_NAME,VALUE_MODEL_NAME
 
 
 def board_to_tensor(board_state):
@@ -35,9 +35,9 @@ class MLPClassifier(nn.Module):
         return x
     
 def test_MLPClassifier():
-    input_size = 5 * 5  
-    hidden_size = 128   
-    num_classes = 10    
+    input_size = 5 * 5
+    hidden_size = 128
+    num_classes = 10
 
     model = MLPClassifier(input_size, hidden_size, num_classes)
 

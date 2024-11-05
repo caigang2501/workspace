@@ -48,21 +48,28 @@ def check_win(player):
 
 
 def play_game(player1,player2):
-    def generate_value():
-        pass
+    def generate_value(player,step):
+        tmp_board = torch.tensor(board,dtype=torch.float32)
+        x, y = divmod(int(step), BOARD_SIZE)
+        tmp_board[x,y] = player
+        if player==1:
+            board_state = torch.tensor(board, dtype=torch.float32)
+        else:
+            board_state = -torch.tensor(board, dtype=torch.float32)
+        board_state = oneto3_channel(board_state).unsqueeze(0)
+        value = value_model(board_state)
+        return value
     def ai_move(player):
         # time.sleep(1)
         # unsqueeze:加维度  squeeze:降维度
         board_tensor = board_to_tensor(board).unsqueeze(0)
         with torch.no_grad():
             prediction = strategy_model(board_tensor).squeeze(0)     # torch.Size([15, 15])
-            print(prediction)
         while True:
-            max_idx_ = torch.argmax(prediction).item()
+            # max_idx_ = torch.argmax(prediction).item()
             topk_values, topk_indices = torch.topk(prediction.view(-1), k=BRANCH_COUND)
-            # TODO topk_indices = [generate_value(x) for x in topk_indices]
-            # print(type(max_idx_),prediction.shape,topk_indices.shape,max_idx.shape)
-            x, y = divmod(max_idx_, BOARD_SIZE)
+            max_idx_ = max([(generate_value(player,idx),idx) for v,idx in zip(topk_values,topk_indices)])[1]
+            x, y = divmod(int(max_idx_), BOARD_SIZE)
             if board[x,y] == 0:
                 board[x,y] = player
                 break
@@ -118,7 +125,7 @@ def play_game(player1,player2):
             
         if game_over:
             if SAVE_BOARD:
-                save_steps(steps,folder=STEPS_PATH)
+                save_steps(steps,folder=DATASET_PATH_SAVE)
             board = board*0
             game_over = False
             player = first
@@ -130,6 +137,6 @@ def play_game(player1,player2):
 if __name__ == "__main__":
     strategy_model = StrategyResnet18(15).eval()
     value_model = ValueEfficientnetB0().eval()
-    strategy_model.load_state_dict(torch.load(MODEL_PATH+STRATEGY_MODEL_NAME))
-    value_model.load_state_dict(torch.load(MODEL_PATH+VALUE_MODEL_NAME))
+    strategy_model.load_state_dict(torch.load(STRATEGY_MODEL_NAME))
+    value_model.load_state_dict(torch.load(VALUE_MODEL_NAME))
     play_game(player1=PERSON,player2=MACHINE)

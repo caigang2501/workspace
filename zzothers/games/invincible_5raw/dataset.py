@@ -2,7 +2,7 @@ import numpy as np
 import torch.nn as nn
 import os,torch
 from torch.utils.data import Dataset, DataLoader
-from constent import BOARD_SIZE
+from constent import BOARD_SIZE,DATASET_PATH_TRAIN,VALUE_TARGET_ALLONES
 from utils import *
 
 
@@ -61,7 +61,8 @@ class ValueDataset(Dataset):
             board = -torch.tensor(self.board, dtype=torch.float32)
             board = oneto3_channel(board)
             target = np.array([0 if self.winned else 1])
-        # target = np.array([1])
+        if VALUE_TARGET_ALLONES:
+            target = np.array([1])
         return board, torch.tensor(target,dtype=torch.float32)
 
 def strategy_dataset(path):
@@ -117,7 +118,7 @@ def value_dataset(path):
 
 
 if __name__ == "__main__":
-    dataset,labels = value_dataset(STEPS_PATH)
+    dataset,labels = value_dataset(DATASET_PATH_TRAIN)
     print(dataset.shape,labels.shape)
     
 

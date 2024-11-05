@@ -1,19 +1,25 @@
-
-SAVE_BOARD = False
-
+# play params
+SAVE_BOARD = True
 PERSON = 'person'
 MACHINE = 'machine'
-MODEL_PATH = 'models/'
-STRATEGY_MODEL_NAME = 'strategy_15.pth'
-VALUE_MODEL_NAME = 'value_15.pth'
-STEPS_PATH = 'games_data/new_data'
+DATASET_PATH_SAVE = 'games_data/new_data'
+BRANCH_COUND = 10 # branch count of strategy model
 
-EPOCHS = 10
+
+# train params
+VALUE_TARGET_ALLONES = False
+# DATASET_PATH_TRAIN = 'games_data/old_data/train'
+DATASET_PATH_TRAIN = 'games_data/new_data'
+MODEL_NEW_TRAINED_PATH = 'models/new_train/'
+STRATEGY_MODEL_NAME = 'models/strategy15.pth'
+VALUE_MODEL_NAME = 'models/value15.pth'
+
+STRATEGY_EPOCHS = 80
+VALUE_EPOCHS = 40
 BATCH_SIZE = 32
-BRANCH_COUND = 7 # branch count of strategy model
 
 
-
+# game params
 BOARD_SIZE = 15 # 个
 CELL_SIZE = 40  # cm
 BOARD_WIDTH = BOARD_SIZE * CELL_SIZE

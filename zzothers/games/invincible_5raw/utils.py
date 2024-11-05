@@ -1,20 +1,20 @@
 import os,datetime
 import numpy as np
 import torch
-from constent import STEPS_PATH
+from constent import DATASET_PATH_SAVE
 
 
 def game_id():
     now = datetime.datetime.now()
     return str(now.day)+str(now.hour)+str(now.minute)+str(now.second)
 
-def save_steps(game_data,folder=STEPS_PATH):
+def save_steps(game_data,folder=DATASET_PATH_SAVE):
     os.makedirs(folder, exist_ok=True)
     file_path = os.path.join(folder, game_id()+".npy")
     with open(file_path, 'wb') as f:
         np.save(f, game_data)
 
-def load_steps(data_folder=STEPS_PATH):
+def load_steps(data_folder=DATASET_PATH_SAVE):
     steps = []
     for file in os.listdir(data_folder):
         file_path = os.path.join(data_folder, file)
@@ -22,7 +22,7 @@ def load_steps(data_folder=STEPS_PATH):
         steps.append(game_data)
     return steps
 
-def load_latest_steps(folder=STEPS_PATH):
+def load_latest_steps(folder=DATASET_PATH_SAVE):
     file_path = os.path.join(folder, os.listdir(folder)[-1])
     game_data = np.load(file_path, allow_pickle=True)
 
