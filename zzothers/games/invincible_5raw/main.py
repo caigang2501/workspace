@@ -62,7 +62,8 @@ def play_game(player1,player2):
     def ai_move(player):
         # time.sleep(1)
         # unsqueeze:加维度  squeeze:降维度
-        board_tensor = board_to_tensor(board).unsqueeze(0)
+        board_state = torch.tensor(board, dtype=torch.float32)
+        board_tensor = oneto3_channel(board_state).unsqueeze(0)
         with torch.no_grad():
             prediction = strategy_model(board_tensor).squeeze(0)     # torch.Size([15, 15])
         while True:

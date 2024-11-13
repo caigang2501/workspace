@@ -65,7 +65,7 @@ class ValueDataset(Dataset):
             target = np.array([1])
         return board, torch.tensor(target,dtype=torch.float32)
 
-def strategy_dataset(path):
+def strategy_dataset(path,threechannel=True):
     dataset = []
     labels = []
     for file in os.listdir(path):
@@ -84,14 +84,15 @@ def strategy_dataset(path):
                 target = steps[idx+1][0]*BOARD_SIZE+steps[idx+1][1]
                 board_state = -torch.tensor(board, dtype=torch.float32)
 
-            board_state = oneto3_channel(board_state)
+            if threechannel:
+                board_state = oneto3_channel(board_state)
             if idx+1<len(steps):
                 board[*steps[idx+1]] = -1
             dataset.append(board_state)
             labels.append(torch.tensor(target, dtype=torch.long))
     return torch.stack(dataset),torch.stack(labels)
 
-def value_dataset(path):
+def value_dataset(path,threechannel=True,target2one=True):
     dataset = []
     labels = []
     for file in os.listdir(path):
@@ -103,14 +104,16 @@ def value_dataset(path):
             if idx%2==0:
                 board[*steps[idx]] = 1
                 board_state = torch.tensor(board, dtype=torch.float32)
-                board_state = oneto3_channel(board_state)
                 target = np.array([1 if winned else 0])
             else:
                 board[*steps[idx]] = -1
                 board_state = -torch.tensor(board, dtype=torch.float32)
-                board_state = oneto3_channel(board_state)
                 target = np.array([0 if winned else 1])
-            target = np.array([1])
+
+            if threechannel:
+                board_state = oneto3_channel(board_state)
+            if target2one:
+                target = np.array([1])
             dataset.append(board_state)
             labels.append(torch.tensor(target, dtype=torch.float32))
     return torch.stack(dataset),torch.stack(labels)

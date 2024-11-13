@@ -83,6 +83,6 @@ def train_value(model_path,epochs):
 
 
 if __name__=='__main__':
-    # train_strategy('models/strategy15.pth',epochs=STRATEGY_EPOCHS)
+    train_strategy('models/strategy15.pth',epochs=STRATEGY_EPOCHS)
     train_value('models/value15.pth',epochs=VALUE_EPOCHS)
 

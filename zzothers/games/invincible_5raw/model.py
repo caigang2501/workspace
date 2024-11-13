@@ -9,29 +9,55 @@ from dataset import *
 from constent import BOARD_SIZE,STRATEGY_MODEL_NAME,VALUE_MODEL_NAME
 
 
-def board_to_tensor(board_state):
-    empty = (torch.tensor(board_state) == 0).float()  # 空位通道
-    black = (torch.tensor(board_state) == 1).float()  # 黑棋通道
-    white = (torch.tensor(board_state) == -1).float() # 白棋通道
-    return torch.stack([empty, black, white], dim=0)  # (3, board_size, board_size)
 
-def test_board_to_tensor(board_state):
-    board_tensor = board_to_tensor(board_state)
-    batch_board = board_tensor.unsqueeze(0)  # 增加 batch 维度 (1, 3, 9, 9)
-    print(batch_board.shape)
 
-class MLPClassifier(nn.Module):
-    def __init__(self, input_size, hidden_size, num_classes):
-        super(MLPClassifier, self).__init__()
-        self.fc1 = nn.Linear(input_size, hidden_size)
-        self.relu = nn.ReLU()
-        self.fc2 = nn.Linear(hidden_size, num_classes)
+
+class StrategyLinear(nn.Module):
+    def __init__(self,board_size=BOARD_SIZE):
+        super(StrategyLinear, self).__init__()
+        self.fc1 = nn.Linear(board_size*board_size, 200)
+        self.actf1 = nn.Sigmoid()
+        self.fc2 = nn.Linear(200, 200)
+        self.actf2 = nn.Sigmoid()
+        self.fc3 = nn.Linear(200, 200)
+        self.actf3 = nn.Sigmoid()
+        self.fc4 = nn.Linear(200, board_size*board_size)
+        self.actf4 = nn.Sigmoid()
 
     def forward(self, x):
         x = x.view(x.size(0), -1)
         x = self.fc1(x)
-        x = self.relu(x)
+        x = self.actf1(x)
         x = self.fc2(x)
+        x = self.actf2(x)
+        x = self.fc3(x)
+        x = self.actf3(x)
+        x = self.fc4(x)
+        x = self.actf4(x)
+        return x
+    
+class ValueLinear(nn.Module):
+    def __init__(self,board_size=BOARD_SIZE):
+        super(ValueLinear, self).__init__()
+        self.fc1 = nn.Linear(board_size*board_size, 200)
+        self.actf1 = nn.Sigmoid()
+        self.fc2 = nn.Linear(200, 200)
+        self.actf2 = nn.Sigmoid()
+        self.fc3 = nn.Linear(200, 200)
+        self.actf3 = nn.Sigmoid()
+        self.fc4 = nn.Linear(200, 1)
+        self.actf4 = nn.Sigmoid()
+
+    def forward(self, x):
+        x = x.view(x.size(0), -1)
+        x = self.fc1(x)
+        x = self.actf1(x)
+        x = self.fc2(x)
+        x = self.actf2(x)
+        x = self.fc3(x)
+        x = self.actf3(x)
+        x = self.fc4(x)
+        x = self.actf4(x)
         return x
     
 def test_MLPClassifier():
@@ -39,11 +65,11 @@ def test_MLPClassifier():
     hidden_size = 128
     num_classes = 10
 
-    model = MLPClassifier(input_size, hidden_size, num_classes)
+    model = StrategyLinear(input_size, hidden_size, num_classes)
 
 
 class CustomStrategyNet(nn.Module):
-    def __init__(self, board_size=15):
+    def __init__(self, board_size=BOARD_SIZE):
         super(CustomStrategyNet, self).__init__()
         self.board_size = board_size
         self.conv1 = nn.Conv2d(3, 64, kernel_size=3, padding=1)
@@ -70,7 +96,7 @@ class CustomStrategyNet(nn.Module):
         return x.view(-1, self.board_size, self.board_size)     # torch.Size([1, 15, 15]), the first dimension is batch size
 
 class CustomValueNet(nn.Module):
-    def __init__(self, board_size=15):
+    def __init__(self, board_size=BOARD_SIZE):
         super(CustomValueNet, self).__init__()
         self.board_size = board_size
 
@@ -102,19 +128,28 @@ class CustomValueNet(nn.Module):
         return x
 
 class StrategyResnet18(nn.Module):
-    def __init__(self, board_size=15):
+    def __init__(self, board_size=BOARD_SIZE):
         super(StrategyResnet18, self).__init__()
         self.board_size = board_size
         self.resnet = resnet18(pretrained=False)
         self.resnet.conv1 = nn.Conv2d(3, 64, kernel_size=3, padding=1)
         self.resnet.fc = nn.Linear(self.resnet.fc.in_features, board_size * board_size)
 
+    #     self.outputs = {}
+    #     for name, layer in self.resnet.named_children():
+    #         layer.register_forward_hook(self.save_output_hook(name))
+
+    # def save_output_hook(self, layer_name):
+    #     def hook(module, input, output):
+    #         self.outputs[layer_name] = output
+    #     return hook
+
     def forward(self, x):
         x = self.resnet(x)
         return x.view(-1, self.board_size, self.board_size)
     
 class StrategyMobilenetV2(nn.Module):
-    def __init__(self, board_size=15):
+    def __init__(self, board_size=BOARD_SIZE):
         super(StrategyMobilenetV2, self).__init__()
         self.board_size = board_size
         self.mobilenet = mobilenet_v2(pretrained=False)
@@ -127,7 +162,7 @@ class StrategyMobilenetV2(nn.Module):
 
 
 class ValueResnet18(nn.Module):
-    def __init__(self, board_size=15):
+    def __init__(self, board_size=BOARD_SIZE):
         super(ValueResnet18, self).__init__()
         self.board_size = board_size
         self.resnet = resnet18(pretrained=False)
@@ -151,11 +186,11 @@ class ValueEfficientnetB0(nn.Module):
 
 def init_stategy_model():
     model = StrategyResnet18(BOARD_SIZE)
-    torch.save(model.state_dict(), MODEL_PATH+STRATEGY_MODEL_NAME)
+    torch.save(model.state_dict(), STRATEGY_MODEL_NAME)
 
 def init_value_model():
     model = ValueEfficientnetB0()
-    torch.save(model.state_dict(), MODEL_PATH+VALUE_MODEL_NAME)
+    torch.save(model.state_dict(), VALUE_MODEL_NAME)
 
 if __name__=='__main__':
     current_board_state = torch.randint(0, 3, (3, 15, 15)).float()  # 0, 1, 2 表示不同的棋子

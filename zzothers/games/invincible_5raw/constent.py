@@ -8,14 +8,14 @@ BRANCH_COUND = 10 # branch count of strategy model
 
 # train params
 VALUE_TARGET_ALLONES = False
-# DATASET_PATH_TRAIN = 'games_data/old_data/train'
-DATASET_PATH_TRAIN = 'games_data/new_data'
+DATASET_PATH_TRAIN = 'games_data/old_data/p2p'
+# DATASET_PATH_TRAIN = 'games_data/new_data'
 MODEL_NEW_TRAINED_PATH = 'models/new_train/'
 STRATEGY_MODEL_NAME = 'models/strategy15.pth'
 VALUE_MODEL_NAME = 'models/value15.pth'
 
-STRATEGY_EPOCHS = 80
-VALUE_EPOCHS = 40
+STRATEGY_EPOCHS = 2
+VALUE_EPOCHS = 1
 BATCH_SIZE = 32
 
 
