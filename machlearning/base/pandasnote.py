@@ -14,7 +14,7 @@ import  numpy as np
 # del(df['name'])
 # print(df[0:2])
 # df.pop('name')
-# print(df.score[1])
+# print(df.iloc[1,1])
 # print(df.T)
 
 # df = pd.DataFrame(np.arange(9).reshape(3,3),columns=['c1','c2','c3'])
