@@ -1,3 +1,10 @@
-*.pt
-*.pth
-*.h5
+__pycache__
+*.xlsx
+*.csv
+*.json
+*.png
+
+
+
+test*.py
+

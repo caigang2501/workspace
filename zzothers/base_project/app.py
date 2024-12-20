@@ -1,18 +1,20 @@
 import sys,os,socket
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from flask import Flask
-from appname.views import view
+from appname.views import gp_view
 
 def create_app():
     app = Flask(__name__)
-
-    app.register_blueprint(view.bp)
+    # 注册 Blueprint
+    app.register_blueprint(gp_view.bp)
 
     return app
 
 if __name__ == "__main__":
     if 'WINDOWS' in socket.gethostname():
-        create_app().run(debug=True)
+        create_app().run(debug=True) # threaded=True processes=True
     else:
         create_app().run()
+
+
+
 

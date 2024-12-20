@@ -1,32 +1,32 @@
-# 使用一个基础的 Python 镜像
-FROM flask
+FROM flask2501
+# FROM gp_env1
 
-# 设置工作目录
-WORKDIR /helloflask
-# 复制当前目录下的所有文件到工作目录
+WORKDIR /green_energy
+
 COPY . .
 
-# 安装依赖
-#RUN pip install --ignore-installed -r requirements.txt
+# COPY requirements.txt .
 # RUN pip install -r requirements.txt
-# RUN chmod 644 /data
+# RUN pip install numpy scipy matplotlib pandas tqdm openpyxl
 
-# 暴露服务运行的端口
 EXPOSE 5000
-
-# 定义环境变量
-ENV FLASK_APP=appname.app.py
-
-# 运行 Flask 服务
+ENV FLASK_APP=app.py
 CMD ["flask", "run", "--host=0.0.0.0"]
 
+# gunicorn --workers 4 --threads 2 --log-level debug --bind 0.0.0.0:8000 wsgi:app
+# ENV FLASK_APP=wsgi.py
+# ENV FLASK_ENV=production
+# CMD ["gunicorn", "--workers", "3","--log-level","debug","--bind","0.0.0.0:5000","wsgi:app"]
 
-# docker build -t danger_dtc1 .
-# docker save -o danger_env.tar danger_dtc_env
+# docker build -t green_energy .
+# docker save -o green_energy.tar green_energy
 # scp danger_env.tar root@10.83.40.175:caigang
-# docker load -i danger_dtc.tar
-# docker run -d -p 8088:5000 danger_dtc1
-# docker run -it -p 5010:5000 danger_dtc bash
+# docker load -i green_energy.tar
+# docker run -d -p 8088:5000 green_energy
+
+# unzip /tmp/green_energy.zip -d /gcph/pythonData/
+# docker run -d -p 8088:5000 --network gp_network --name mygreen_energy green_energy
+# docker run -it -p 5010:5000 green_energy bash
 
 # docker exec -it <e2545f0769ed> uname -m
 # gunicorn -w 4 -b 0.0.0.0:5000 your_flask_app:app
