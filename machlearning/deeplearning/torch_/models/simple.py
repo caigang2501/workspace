@@ -1,39 +1,36 @@
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
+import torch.optim as optim
 
-class SimpleModel(nn.Module):
+class Net(nn.Module):
     def __init__(self):
-        super(SimpleModel, self).__init__()
-        # nn.Conv2d：二维卷积层。
-        # nn.LSTM：长短时记忆网络（LSTM）层等。
-        self.fc1 = nn.Linear(10, 5)
-        self.relu = nn.ReLU()
-        self.fc2 = nn.Linear(5, 2)
+        super(Net, self).__init__()
+        self.conv1 = nn.Conv2d(3, 6, 5)
+        self.pool = nn.MaxPool2d(2, 2)
+        self.conv2 = nn.Conv2d(6, 16, 5)
+        self.fc1 = nn.Linear(16 * 5 * 5, 120)
+        self.fc2 = nn.Linear(120, 84)
+        self.fc3 = nn.Linear(84, 10)
 
     def forward(self, x):
-        x = self.fc1(x)
-        x = self.relu(x)
-        x = self.fc2(x)
-        return x
-    
-class RnnModel(nn.Module):
-    def __init__(self):
-        super(SimpleModel, self).__init__()
-        self.fc1 = nn.RNN(10, 5)
-        self.relu = nn.ReLU()
-        self.fc2 = nn.Linear(5, 2)
-
-    def forward(self, x):
-        x = self.fc1(x)
-        x = self.relu(x)
-        x = self.fc2(x)
+        x = self.pool(F.relu(self.conv1(x)))
+        x = self.pool(F.relu(self.conv2(x)))
+        x = x.view(-1, 16 * 5 * 5)
+        x = F.relu(self.fc1(x))
+        x = F.relu(self.fc2(x))
+        x = self.fc3(x)
         return x
 
-model = SimpleModel()
+net = Net()
+optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
 
-# 输入数据
-input_data = torch.randn(1, 10)
+# print("Model's state_dict:")
+# for param_tensor in net.state_dict():
+#     print(param_tensor, "\t", net.state_dict()[param_tensor].size())
+# print("Optimizer's state_dict:")
+# for var_name in optimizer.state_dict():
+#     print(var_name, "\t", optimizer.state_dict()[var_name])
 
-# 进行前向传播
-output = model(input_data)
-print(output)
+
+

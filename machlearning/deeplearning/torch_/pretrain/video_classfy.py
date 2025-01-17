@@ -21,3 +21,4 @@ label = prediction.argmax().item()
 score = prediction[label].item()
 category_name = weights.meta["categories"][label]
 print(f"{category_name}: {100 * score}%")
+

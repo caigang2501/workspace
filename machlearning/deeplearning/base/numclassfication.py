@@ -45,7 +45,7 @@ def flow_back(lr:float,layers:list,datas,n:int):
         gbs = datas[-i] * (1-datas[-i]) * wgtemp
         wgtemp = np.dot(layers[-i],gbs)
         bss[-i] += lr*gbs
-        layers[-i] += np.array([datas[-i-1]]).T * np.array([gbs]) * lr    
+        layers[-i] += np.array([datas[-i-1]]).T * np.array([gbs]) * lr
         i += 1
 
 e = 0

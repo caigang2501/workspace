@@ -24,37 +24,32 @@ class CustomResNet50(nn.Module):
         x = x.view(x.size(0), -1)
         x = self.fc(x)
         return x
-# 定义自定义数据集类
+
+
 class CustomDataset(ImageFolder):
     def __init__(self, root, transform=None):
         super().__init__(root, transform=transform)
 
     def __getitem__(self, index):
-        # 获取图像路径和标签
         path, _ = self.samples[index]
-        # 解析类别标签
         label = int(os.path.basename(os.path.dirname(path)))
         img = self.loader(path)
-        # 应用预处理
         if self.transform is not None:
             img = self.transform(img)
         return img, label
 
 if __name__=='__main__':
-    # 设置数据集路径
-    data_root = 'Classfy/data/train/helmet'
+    data_root = 'data/traindata/fire'
 
-    # 定义数据预处理
     transform = T.Compose([
-        T.Resize((224, 224)),  # 调整图像大小
-        T.ToTensor(),           # 将图像转换为张量
-        T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])  # 标准化
+        T.Resize((224, 224)),
+        T.ToTensor(),
+        T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
     ])
     custom_dataset = CustomDataset(data_root, transform=transform)
 
     batch_size = 32
     custom_dataloader = DataLoader(custom_dataset, batch_size=batch_size, shuffle=True)
-    # 创建自定义 ResNet50 模型
     model = CustomResNet50(num_classes=num_classes)
 
     # Remove quantization
@@ -65,11 +60,9 @@ if __name__=='__main__':
     # for param in model.parameters():
     #     param.requires_grad = False
 
-    # Define your loss function and optimizer
     criterion = torch.nn.CrossEntropyLoss()
     optimizer = torch.optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
 
-    # Train the model on your custom dataset
     num_epochs = 1500
     min_loss = 0.4
     for epoch in range(num_epochs):
@@ -83,7 +76,6 @@ if __name__=='__main__':
 
         print(f'Epoch {epoch+1}/{num_epochs}, Loss: {loss.item()}')
 
-    # Save the model
         if loss.item()<min_loss:
             min_loss = loss.item()
             torch.save(model.state_dict(), str(min_loss)+'torch_firedtc_resnet50.pth')

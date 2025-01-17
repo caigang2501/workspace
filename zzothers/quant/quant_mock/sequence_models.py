@@ -1,9 +1,10 @@
+import sys,os
 import torch
 import torch.nn as nn
 import torch.optim as optim
 import numpy as np
 
-from zzothers.quant.data.tushare.data import data_ali,data_ts
+# sys.path.append(os.getcwd())
 
 
 seq_len = 20
@@ -39,7 +40,7 @@ class TransformerTimeSeries(nn.Module):
     def forward(self, src):
         src = self.input_layer(src)
         src = src.permute(1, 0, 2)
-        transformer_output = self.transformer(src, src)
+        transformer_output = self.transformer(src, src)  # __call__()
         output = self.output_layer(transformer_output[-1])
         return output
 
@@ -76,61 +77,6 @@ def test_tf():
     print(benifit/principal)
 
 if __name__=='__main__':
+    pass
     # train_tf()
     test_tf()
-
-
-
-class TemporalConvNet(nn.Module):
-    def __init__(self, input_size=1, num_channels=[25, 25, 25], kernel_size=3):
-        super(TemporalConvNet, self).__init__()
-        layers = []
-        num_levels = len(num_channels)
-        
-        for i in range(num_levels):
-            in_channels = input_size if i == 0 else num_channels[i-1]
-            out_channels = num_channels[i]
-            dilation_size = 2 ** i
-            padding = (kernel_size - 1) * dilation_size
-            layers += [nn.Conv1d(in_channels, out_channels, kernel_size, padding=padding, dilation=dilation_size),
-                       nn.ReLU(),
-                       nn.BatchNorm1d(out_channels)]
-        self.network = nn.Sequential(*layers)
-        self.output_layer = nn.Linear(num_channels[-1], 1)
-
-    def forward(self, x):
-        x = x.permute(0, 2, 1)  # Conv1d expects (batch, channels, seq_len)
-        x = self.network(x)
-        x = x[:, :, -1]  # 取最后时间步
-        return self.output_layer(x)
-
-def train_tcn():
-    seq_len = 20
-    X, y = create_data(seq_len)
-    model = TemporalConvNet()
-    criterion = nn.MSELoss()
-    optimizer = optim.Adam(model.parameters(), lr=0.001)
-
-    # 训练模型
-    epochs = 20
-    for epoch in range(epochs):
-        model.train()
-        optimizer.zero_grad()
-        output = model(X.unsqueeze(1))  # 添加通道维度
-        loss = criterion(output.squeeze(), y)
-        loss.backward()
-        optimizer.step()
-        print(f'Epoch {epoch+1}, Loss: {loss.item()}')
-
-    # 预测
-    model.eval()
-    with torch.no_grad():
-        sample_input = X[0].unsqueeze(0).unsqueeze(1)  # 单个样本
-        prediction = model(sample_input)
-        print(f"True value: {y[0].item()}, Predicted value: {prediction.item()}")
-
-
-if __name__=='__main__':
-    pass
-
-

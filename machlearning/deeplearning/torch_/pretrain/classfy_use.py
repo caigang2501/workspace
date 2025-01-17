@@ -6,16 +6,11 @@ from PIL import Image
 from torchvision.io.image import read_image
 from torchvision.models import resnet50
 import torchvision.transforms as T
-
 from torch.utils.data import DataLoader
 from torchvision.datasets import ImageFolder
-from ellzaf_ml.models import GhostFaceNetsV2
+from torchvision.models.quantization import resnet50, ResNet50_QuantizedWeights
 
-IMAGE_SIZE = 224
-num_classes = 6
-dic_names = {0:'NicoleKidman',1:'TangWei',2:'TaylorSwift',3:'WangZuXian',4:'ZhangGuoRong',5:'ZhangManYu'}
 
-# 定义自定义数据集类
 class CustomDataset_pred(ImageFolder):
     def __init__(self, root, transform=None):
         super().__init__(root, transform=transform)
@@ -27,8 +22,7 @@ class CustomDataset_pred(ImageFolder):
         if self.transform is not None:
             img = self.transform(img)
         return img, label
-    
-# 创建与训练时相同结构的模型
+
 class CustomResNet50(nn.Module):
     def __init__(self, num_classes=2):
         super(CustomResNet50, self).__init__()
@@ -47,30 +41,25 @@ class CustomResNet50(nn.Module):
 class Predictor:
     def __init__(self,model_path) -> None:
         self.transform = T.Compose([
-        T.Resize((224, 224)),  # 调整图像大小
-        T.ToTensor(),           # 将图像转换为张量
-        T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])  # 标准化
+        T.Resize((224, 224)),
+        T.ToTensor(),
+        T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
         ])
         
-        self.model = GhostFaceNetsV2(image_size=IMAGE_SIZE, num_classes=num_classes, width=1, dropout=0.)
+        self.model = CustomResNet50(num_classes=2)
         self.model.load_state_dict(torch.load(model_path))
         self.model.eval()
 
     def predict_bypath(self,data_root):
-        # 创建自定义数据集
         custom_dataset = CustomDataset_pred(data_root, transform=self.transform)
 
-        # 创建 DataLoader
         batch_size = 800
         custom_dataloader = DataLoader(custom_dataset, batch_size=batch_size, shuffle=False)
 
-        # 遍历 DataLoader 进行预测
         for inputs, labels in custom_dataloader:
-            # 使用模型进行预测
             with torch.no_grad():
                 outputs = self.model(inputs)
             
-            # 处理模型输出，这里仅打印预测结果的类别
             _, predicted = torch.max(outputs, 1)
         return _.numpy(),predicted.numpy()
 
@@ -79,7 +68,6 @@ class Predictor:
         img_transformed = self.transform(img)
         img_transformed = img_transformed.unsqueeze(0)
 
-        # 使用模型进行预测
         with torch.no_grad():
             output = self.model(img_transformed)
 
@@ -88,16 +76,31 @@ class Predictor:
         # print("Predicted Class:", predicted_class)
         return predicted_class
 
+def test():
+    img = read_image(os.path.join(os.getcwd(),'data/traindata/imgs/bird1.jpg'))
+
+    weights = ResNet50_QuantizedWeights.DEFAULT
+    model = resnet50(weights=weights, quantize=True)
+    model.eval()
+
+    preprocess = weights.transforms()
+
+    batch = preprocess(img).unsqueeze(0)
+
+    prediction = model(batch).squeeze(0).softmax(0)
+    class_id = prediction.argmax().item()
+    score = prediction[class_id].item()
+    category_name = weights.meta["categories"][class_id]
+    print(f"categories: {category_name}: {100 * score}%")
+
 if __name__=='__main__':
-    model_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'data/models/0GhostFaceNet.pth')
+    model_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'data/models/torch_firedtc_resnet50.pth')
     predictor = Predictor(model_path)
 
     # data_root = 'data/objdetect/train/fire'
-    data_root = 'machlearning/data/imgs/facedtc_test'
+    data_root = 'data/output_frames/frames/'
     result = predictor.predict_bypath(data_root)
-    print(result)
 
-    
     # bug exist
     # img_path = 'data/objdetect/train/1'
     # for file_name in os.listdir(img_path):

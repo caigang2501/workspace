@@ -3,7 +3,7 @@ from torchvision.models.segmentation import fcn_resnet50, FCN_ResNet50_Weights
 from torchvision.transforms.functional import to_pil_image
 
 import os
-img = read_image(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),'imgs/bird1.jpg'))
+img = read_image(os.path.join(os.getcwd(),'data/traindata/imgs/bird1.jpg'))
 
 # Step 1: Initialize model with the best available weights
 weights = FCN_ResNet50_Weights.DEFAULT
