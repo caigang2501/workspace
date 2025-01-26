@@ -1,23 +1,9 @@
-pip install packagename --no-deps
-
 tar -cvf green_energy.tar green_energy
-scp danger_dtc_code.tar root@10.83.40.175:caigang/     root
-scp danger_dtc_code.tar user@10.83.190.141:caigang/   R8z@6cDY
+scp danger_dtc_code.tar root@10.83.40.175:caigang/   root
+scp danger_dtc_code.tar user@10.83.190.141:caigang/  R8z@6cDY
 tar -xvf danger_dtc_code.tar 
 tar -xvzf filename.tgz
 
-rm -rf directoryname
-scp main.py root@10.83.40.175:caigang/danger_detection/main.py
-
-cd /gcph/pythonData
-
-
-
-
-
-
-
-justMyCode:false
 
 linux:
 cat /etc/os-release

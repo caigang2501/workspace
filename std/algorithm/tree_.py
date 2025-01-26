@@ -79,6 +79,7 @@ def bfs_by_layer(root):
 
     return result
 
+
 def bfs_with_None(root):
     if not root:
         return []
@@ -183,30 +184,6 @@ def tree2list(root):
         if not node.left and not node.right:
             l.append(node.val)
     return l
-
-#=======================test=================================
-
-class Solution:
-    def connect(self, root):
-        start,curr = root,root
-        while curr.left:
-            curr.left.next = curr.right
-            abov = curr.right
-            if curr.next:
-                curr = curr.next
-                abov.next = curr.left
-            else:
-                curr = start.left
-                start = start.left
-        return root
-
-s = Solution()
-root = list2tree([1,2,3,4,5,6,7])
-result = s.connect(root)
-while result:
-    print(result.val)
-    result = result.next
-# root = list2tree([3,3,None,4,2])
 
 # 1 2 3 4 5 6 7  bfs
 # 1 2 4 5 3 6 7  dfs
