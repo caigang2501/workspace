@@ -29,11 +29,11 @@ def trading_score(stock_data,double_direction=False):
     i = data_len
     while i<len(stock_data)-1:
         prediction = predict(stock_data[i-data_len:i])
-        if not double_direction:
-            if prediction>0:
-                final_score += base_score*(stock_data[i]-stock_data[i-1])/stock_data[i-1]
+        if prediction>0:
+            base_score *= stock_data[i]/stock_data[i-1]
         else:
-            final_score += base_score*(stock_data[i-1]-stock_data[i])/stock_data[i-1]
+            if double_direction:
+                base_score += base_score*(stock_data[i-1]-stock_data[i])/stock_data[i-1]
         i += 1
     return final_score
 
