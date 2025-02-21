@@ -27,7 +27,7 @@ y = data['pct_chg']
 scaler = StandardScaler()
 # scaler = MinMaxScaler(feature_range=(0, 1))
 X_scaled = scaler.fit_transform(X)
-X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.98, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.97, random_state=42)
 
 
 X_train_tensor = torch.tensor(X_train, dtype=torch.float32)
@@ -52,11 +52,20 @@ class CustomLoss(nn.Module):
     def __init__(self):
         super(CustomLoss, self).__init__()
 
-    def forward(self, outputs, targets):
+    def forward(self, outputs:torch.Tensor, targets):
         aim = torch.where(targets > 0, 1, 0)
+        t1 = torch.where(targets > 0, 1, -1)
+        t2 = 2*(outputs[:, 0] < outputs[:, 1]).int()-1
+        t = t1*t2
+        print('t',t)
         # targets = torch.argmax(one_hot_targets, dim=1)
         targets_onehot = torch.nn.functional.one_hot(aim, num_classes=2)
-        mse = torch.mean((outputs - targets_onehot) ** 2)
+        print('outputs',outputs)
+        print('targets',targets)
+        print('torch.e**-targets',torch.e**targets)
+        print('2*torch.sigmoid(2*targets)',2*torch.sigmoid(2*-targets))
+        print('(outputs-targets_onehot)**2',(outputs-targets_onehot)**2)
+        mse = torch.mean((outputs-targets_onehot)**2)
         # l1 = torch.mean(torch.abs(outputs - targets))
         return mse
 
