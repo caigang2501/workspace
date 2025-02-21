@@ -11,7 +11,6 @@ from sklearn.metrics import classification_report, accuracy_score
 import torch
 import torch.nn as nn
 import torch.optim as optim
-
 # data = data_ts1()
 # data.to_csv('data/stock_data.csv')
 data = pd.read_csv('data/quant/stock_data.csv')
@@ -30,10 +29,12 @@ scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)
 X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.98, random_state=42)
 
+
 X_train_tensor = torch.tensor(X_train, dtype=torch.float32)
 X_test_tensor = torch.tensor(X_test, dtype=torch.float32)
 y_train_tensor = torch.tensor(y_train.values, dtype=torch.float32)
 y_test_tensor = torch.tensor(y_test.values, dtype=torch.float32)
+
 class StockPredictionModel(nn.Module):
     def __init__(self):
         super(StockPredictionModel, self).__init__()
@@ -52,21 +53,19 @@ class CustomLoss(nn.Module):
         super(CustomLoss, self).__init__()
 
     def forward(self, outputs, targets):
-        # print(targets,type(targets[0]))
+        aim = torch.where(targets > 0, 1, 0)
         # targets = torch.argmax(one_hot_targets, dim=1)
-        targets = torch.nn.functional.one_hot(targets, num_classes=2)
-        mse = torch.mean((outputs - targets) ** 2)
-        l1 = torch.mean(torch.abs(outputs - targets))
-        loss = mse
-        return loss
+        targets_onehot = torch.nn.functional.one_hot(aim, num_classes=2)
+        mse = torch.mean((outputs - targets_onehot) ** 2)
+        # l1 = torch.mean(torch.abs(outputs - targets))
+        return mse
 
 def train():
     model = StockPredictionModel()
     # criterion = nn.CrossEntropyLoss()
     criterion = CustomLoss()
     optimizer = optim.Adam(model.parameters(), lr=0.001)
-
-    epochs = 1
+    epochs = 2
     best_loss = float('inf')
     train_result = []
     for epoch in range(epochs):
