@@ -76,14 +76,17 @@ def plot_function_graph(function, *args):
         raise ValueError("函数参数数量与 args 的范围不匹配！")
 import math 
 def f1(x):
-    return np.log(x)*np.log(1-x)
+    return 2/(1+np.e**x)
+    # return np.log(x)*np.log(1-x)
+def f2(x,y):
+    return x*y
 
 # def f2(x, y):
 #     return np.sin(np.sqrt(x**2 + y**2))
 
 if __name__=='__main__':
     # plot_distribution(np.random.rand)
-    plot_function_graph(f1, (0, 1))
+    plot_function_graph(f1, (-10, 10))
 
     # plot_function_graph(f2, (-5, 5), (-5, 5))
 

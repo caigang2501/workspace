@@ -4,12 +4,10 @@ import  numpy as np
 
 # data = [['Alex',10],['Bob',12],['Clarke',13]]
 # df = pd.DataFrame(data,columns=['Name','Age'],index=["a","b","c"])
-# print(df)
 
 # data = {'name':['Tom', 'Jack', 'Steve', 'Ricky'],'age':[28,34,29,42]}
 # df = pd.DataFrame(data, index=['rank1','rank2','rank3','rank4'])
 # df.insert(1,column='score',value=[91,90,75,89])
-# print(df)
 # df = df.drop('rank1')
 # del(df['name'])
 # print(df[0:2])
