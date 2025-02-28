@@ -5,12 +5,15 @@ import yfinance as yf
 import pandas as pd
 from datetime import datetime
 
-def data_ts1(start_date):
+def data_ts1(ts_code:str,start_date,save=True):
     pro = ts.pro_api('dbaf7a76b4e4076a6bac684178e8db659ae659c79d65afa092f52cd1')
     # data = pro.stock_basic(exchange='', list_status='L', fields='ts_code,symbol,name,area,industry,list_date')
     # data.to_csv(f'stock_list.csv',index=False)
     # df_month = pro.monthly(ts_code='000001.SZ', start_date='20240121', end_date=str(datetime.now().date()).replace('-',''))  # 一次多个 ts_code='000001.SZ,600000.SH' 月：monthly
-    df_day = pro.daily(ts_code='000001.SZ', start_date=start_date, end_date=str(datetime.now().date()).replace('-',''))  # 一次多个 ts_code='000001.SZ,600000.SH' 月：monthly
+    df_day = pro.daily(ts_code=ts_code, start_date=start_date, end_date=str(datetime.now().date()).replace('-',''))  # 一次多个 ts_code='000001.SZ,600000.SH' 月：monthly
+    if save:
+        csv_name = ts_code.replace('.','')
+        df_day.to_csv(f'data/quant/{csv_name}.csv')
     return df_day
 
 def data_ts():

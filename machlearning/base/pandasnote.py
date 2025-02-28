@@ -15,13 +15,9 @@ import  numpy as np
 # print(df.iloc[1,1])
 # print(df.T)
 
-# df = pd.DataFrame(np.arange(9).reshape(3,3),columns=['c1','c2','c3'])
-# print(df)
-# print(df.apply(lambda x: x.max() - x.min()))
-# print(df.apply(lambda x: x.max() - x.min(),axis=1))
-
-# 将第一列的所有值设置为 1
-# df.iloc[:, 0] = 1
+# print(df.loc[0:1, ['name', 'city']]) 
+# print(df.iloc[0:2, [0, 2]])
+# print(df.iloc[0:2,:])
 
 # df1 = pd.DataFrame({'key': ['A', 'B', 'C'], 'value1': [1, 2, 3]})
 # df2 = pd.DataFrame({'key': ['B', 'C', 'D'], 'value2': [4, 5, 6]})
@@ -56,5 +52,4 @@ df3 = df.groupby('Category').agg({'Value':'min','Value1':'count'})
 
 for index, row in df.iterrows():
     print(row.values)
-
 

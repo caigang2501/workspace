@@ -18,7 +18,7 @@ def mock_trading(stock_data,double_direction=False):
             if prediction>0:
                 base_money *= stock_data[i]/stock_data[i-1]
             else:
-                base_money *= max((2*stock_data[i-1]-stock_data[i]),0)/stock_data[i-1]
+                base_money *= (2*stock_data[i-1]-stock_data[i])/stock_data[i-1]
         i += 1
     return base_money
 
